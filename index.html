@@ -1,0 +1,2309 @@
+<title>Hanhan Studio v2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap">
+
+<style>
+:root {
+  --bg: #0e0e12;
+  --bg-card: #1a1a22;
+  --bg-card-hover: #222230;
+  --bg-elevated: #25252f;
+  --fg: #e8e6e3;
+  --fg-dim: #8a8890;
+  --accent: #f59e0b;
+  --accent-glow: rgba(245, 158, 11, 0.15);
+  --accent-dark: #b45309;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --blue: #3b82f6;
+  --purple: #a855f7;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f5f3f0; --bg-card: #ffffff; --bg-card-hover: #f0ede8; --bg-elevated: #f8f7f5;
+    --fg: #1a1a22; --fg-dim: #6b6878; --accent: #d97706; --accent-glow: rgba(217,119,6,0.1); --accent-dark: #92400e;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f5f3f0; --bg-card: #ffffff; --bg-card-hover: #f0ede8; --bg-elevated: #f8f7f5;
+  --fg: #1a1a22; --fg-dim: #6b6878; --accent: #d97706; --accent-glow: rgba(217,119,6,0.1); --accent-dark: #92400e;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; } }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0; min-height: 100vh; -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 100; background: var(--bg);
+}
+
+/* HEADER */
+.site-header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
+  background: var(--bg); border-bottom: 1px solid color-mix(in srgb, var(--fg) 8%, transparent); padding: 16px 0;
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; max-width: 960px; margin: 0 auto; }
+.logo { font-family: var(--font-display); font-weight: 900; font-size: 1.4rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.logo-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: grid; place-items: center; font-size: 16px; color: #fff; font-weight: 800; }
+.logo span { color: var(--accent); }
+
+nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; max-width: 960px; margin: 12px auto 0; padding-bottom: 4px; }
+nav::-webkit-scrollbar { display: none; }
+nav button {
+  font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; padding: 8px 16px;
+  border: none; border-radius: 100px; background: var(--bg-card); color: var(--fg-dim);
+  cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.02em; text-transform: uppercase;
+}
+nav button:hover { background: var(--bg-card-hover); color: var(--fg); }
+nav button.active { background: var(--accent); color: #fff; }
+
+/* PAGES */
+.page { display: none; max-width: 960px; margin: 0 auto; padding: 24px 0 60px; }
+.page.active { display: block; animation: fadeUp 0.35s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* HERO */
+.hero { text-align: center; padding: 48px 0 32px; }
+.hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-tagline { font-size: 1rem; color: var(--fg-dim); margin-top: 12px; max-width: 520px; margin-inline: auto; line-height: 1.5; }
+
+/* TOOL GRID */
+.tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-top: 32px; }
+.tool-card {
+  background: var(--bg-card); border-radius: var(--radius); padding: 20px 16px; text-align: center;
+  cursor: pointer; transition: all 0.25s; border: 1px solid transparent; text-decoration: none;
+  color: var(--fg); display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative;
+}
+.tool-card:hover { background: var(--bg-card-hover); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-glow); }
+.tool-card .icon { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-glow); display: grid; place-items: center; font-size: 22px; }
+.tool-card .label { font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.01em; }
+.tool-card .desc { font-size: 0.72rem; color: var(--fg-dim); line-height: 1.4; margin-top: 2px; }
+.tool-card .badge { position: absolute; top: 8px; right: 8px; font-size: 0.6rem; font-weight: 700; padding: 2px 7px; border-radius: 100px; letter-spacing: 0.05em; text-transform: uppercase; }
+.badge-new { background: var(--accent); color: #fff; }
+.badge-ready { background: var(--success); color: #fff; }
+.badge-soon { background: var(--fg-dim); color: var(--bg); }
+
+/* GALLERY */
+.section-title {
+  font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; margin: 40px 0 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title::after { content: ''; flex: 1; height: 1px; background: color-mix(in srgb, var(--fg) 12%, transparent); }
+
+.marquee-wrap { overflow: hidden; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 0 max(16px, env(safe-area-inset-left, 0px)); }
+.marquee-track { display: flex; gap: 12px; width: max-content; animation: marquee 30s linear infinite; }
+.marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.marquee-track img { height: 220px; border-radius: var(--radius); object-fit: cover; flex-shrink: 0; }
+@media (max-width: 600px) { .marquee-track img { height: 160px; } }
+
+/* PAGE INTRO */
+.page-intro { padding: 32px 0 8px; }
+.page-intro h2 { font-family: var(--font-display); font-weight: 900; font-size: clamp(1.5rem, 4vw, 2.2rem); letter-spacing: -0.02em; text-wrap: balance; }
+.page-intro p { color: var(--fg-dim); margin-top: 8px; font-size: 0.95rem; }
+
+.step-bar { display: flex; align-items: center; gap: 6px; margin-top: 16px; font-size: 0.8rem; font-weight: 600; color: var(--accent); font-family: var(--font-display); letter-spacing: 0.02em; flex-wrap: wrap; }
+.step-bar span { display: flex; align-items: center; gap: 4px; }
+.step-bar .divider { color: var(--fg-dim); }
+
+/* NOTICE */
+.notice { background: color-mix(in srgb, var(--accent) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); border-radius: var(--radius); padding: 14px 18px; margin-top: 20px; font-size: 0.85rem; line-height: 1.5; color: var(--accent); }
+.notice strong { display: block; margin-bottom: 4px; }
+
+/* PROMPT LIBRARY */
+.lang-toggle { display: flex; gap: 6px; margin-bottom: 20px; }
+.lang-toggle button { font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; padding: 8px 20px; border: 1px solid color-mix(in srgb, var(--fg) 15%, transparent); border-radius: 100px; background: transparent; color: var(--fg-dim); cursor: pointer; transition: all 0.2s; }
+.lang-toggle button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.prompt-grid { display: grid; gap: 12px; }
+.prompt-item { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid transparent; transition: border-color 0.2s; }
+.prompt-item:hover { border-color: color-mix(in srgb, var(--fg) 12%, transparent); }
+.prompt-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+.prompt-header h3 { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+.prompt-header .arrow { font-size: 0.8rem; color: var(--fg-dim); transition: transform 0.2s; }
+.prompt-item.open .arrow { transform: rotate(180deg); }
+.prompt-body { display: none; padding: 0 16px 16px; }
+.prompt-item.open .prompt-body { display: block; }
+.prompt-text { background: color-mix(in srgb, var(--fg) 5%, transparent); border-radius: var(--radius-sm); padding: 14px; font-size: 0.85rem; line-height: 1.6; color: var(--fg-dim); white-space: pre-wrap; word-break: break-word; max-height: 300px; overflow-y: auto; }
+.copy-btn { margin-top: 10px; font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; padding: 8px 18px; border: none; border-radius: 100px; background: var(--accent); color: #fff; cursor: pointer; transition: all 0.2s; }
+.copy-btn:hover { background: var(--accent-dark); }
+.copy-btn.copied { background: var(--success); }
+
+/* ─── TOOL DETAIL OVERLAY ─── */
+.tool-detail-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  overflow-y: auto; padding: env(safe-area-inset-top, 0px) 0 0;
+}
+.tool-detail-overlay.active { display: block; animation: fadeUp 0.3s ease; }
+
+.tool-detail {
+  max-width: 720px; margin: 0 auto; padding: 20px 16px 60px; min-height: 100vh;
+}
+.tool-detail-back {
+  display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-body);
+  font-size: 0.85rem; font-weight: 600; color: var(--accent); cursor: pointer;
+  padding: 8px 16px; border-radius: 100px; background: var(--bg-card); border: none;
+  margin-bottom: 20px; transition: all 0.2s;
+}
+.tool-detail-back:hover { background: var(--bg-card-hover); }
+
+.tool-detail-hero {
+  text-align: center; padding: 24px 0 32px;
+}
+.tool-detail-hero .icon-big {
+  width: 72px; height: 72px; border-radius: 20px; background: var(--accent-glow);
+  display: grid; place-items: center; font-size: 36px; margin: 0 auto 16px;
+  border: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.tool-detail-hero h2 {
+  font-family: var(--font-display); font-weight: 900; font-size: 1.8rem; letter-spacing: -0.02em;
+}
+.tool-detail-hero .tag {
+  display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 100px;
+  margin-top: 8px; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.tool-detail-hero .subtitle {
+  color: var(--fg-dim); font-size: 0.95rem; margin-top: 12px; max-width: 500px; margin-inline: auto; line-height: 1.5;
+}
+
+.detail-section {
+  background: var(--bg-card); border-radius: var(--radius); padding: 20px; margin-top: 16px;
+}
+.detail-section h3 {
+  font-family: var(--font-display); font-weight: 800; font-size: 1rem; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.detail-section p, .detail-section li {
+  font-size: 0.88rem; line-height: 1.65; color: var(--fg-dim);
+}
+.detail-section ul, .detail-section ol {
+  padding-left: 20px; display: grid; gap: 8px;
+}
+.detail-section li::marker { color: var(--accent); }
+
+.detail-prompt-box {
+  background: color-mix(in srgb, var(--fg) 5%, transparent); border-radius: var(--radius-sm);
+  padding: 16px; margin-top: 12px; position: relative;
+}
+.detail-prompt-box pre {
+  font-family: var(--font-body); font-size: 0.82rem; line-height: 1.6; color: var(--fg-dim);
+  white-space: pre-wrap; word-break: break-word;
+}
+.detail-prompt-box .copy-btn { position: absolute; top: 10px; right: 10px; margin: 0; font-size: 0.72rem; padding: 6px 14px; }
+
+.detail-tips {
+  display: grid; gap: 8px; margin-top: 12px;
+}
+.detail-tip {
+  display: flex; gap: 10px; padding: 12px; background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border-radius: var(--radius-sm); font-size: 0.84rem; line-height: 1.5; color: var(--fg-dim);
+}
+.detail-tip .tip-icon { font-size: 18px; flex-shrink: 0; }
+
+.detail-cta {
+  display: block; width: 100%; text-align: center; padding: 14px; border: none; border-radius: var(--radius);
+  background: var(--accent); color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 1rem;
+  cursor: pointer; transition: all 0.2s; margin-top: 20px; text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.detail-cta:hover { background: var(--accent-dark); transform: translateY(-1px); }
+.detail-cta.disabled { background: var(--fg-dim); cursor: not-allowed; }
+
+/* ─── CHARACTER GENERATOR FORM ─── */
+.cg-hero-banner {
+  border-radius: var(--radius); overflow: hidden; position: relative;
+  height: 180px; display: flex; align-items: flex-end; padding: 20px;
+  background: linear-gradient(135deg, #0a1628 0%, #152238 50%, #1a2a42 100%);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.cg-hero-banner h2 {
+  font-family: var(--font-display); font-weight: 900; font-size: 1.6rem;
+  letter-spacing: -0.01em; text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+.cg-version {
+  display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 4px 12px;
+  border-radius: 100px; background: var(--accent); color: #fff; margin-top: 12px;
+  letter-spacing: 0.04em;
+}
+.cg-desc {
+  color: var(--fg-dim); font-size: 0.88rem; margin-top: 10px; line-height: 1.5;
+}
+.cg-section {
+  background: var(--bg-card); border-radius: var(--radius); margin-top: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+  overflow: hidden;
+}
+.cg-section-header {
+  padding: 14px 16px; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none; font-family: var(--font-display); font-weight: 700;
+  font-size: 0.95rem;
+}
+.cg-section-header .icon { margin-right: 8px; }
+.cg-section-header .chevron {
+  font-size: 0.7rem; color: var(--accent); transition: transform 0.2s;
+}
+.cg-section.open .chevron { transform: rotate(180deg); }
+.cg-section-body { display: none; padding: 0 16px 16px; }
+.cg-section.open .cg-section-body { display: block; }
+
+.cg-label {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--fg-dim); margin-bottom: 8px; margin-top: 14px;
+}
+.cg-label:first-child { margin-top: 0; }
+
+.cg-btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.cg-btn {
+  padding: 8px 18px; border-radius: 100px; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  background: transparent; color: var(--fg-dim); font-family: var(--font-body);
+  font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.cg-btn:hover { border-color: var(--accent); color: var(--fg); }
+.cg-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.cg-select {
+  width: 100%; padding: 10px 14px; border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--fg) 12%, transparent);
+  color: var(--fg); font-family: var(--font-body); font-size: 0.85rem;
+  cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8890' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+}
+.cg-select option { background: var(--bg-card); color: var(--fg); }
+
+.cg-ratio-group { display: flex; gap: 6px; }
+.cg-ratio-btn {
+  padding: 6px 14px; border-radius: 100px; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  background: transparent; color: var(--fg-dim); font-family: var(--font-body);
+  font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.cg-ratio-btn:hover { border-color: var(--accent); }
+.cg-ratio-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.cg-tab-group { display: flex; gap: 0; margin-top: 12px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid color-mix(in srgb, var(--fg) 12%, transparent); }
+.cg-tab {
+  flex: 1; padding: 8px; text-align: center; border: none;
+  background: transparent; color: var(--fg-dim); font-family: var(--font-body);
+  font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.cg-tab.active { background: var(--accent); color: #fff; }
+
+.cg-preview {
+  margin-top: 12px; border-radius: var(--radius-sm); overflow: hidden;
+  background: color-mix(in srgb, var(--fg) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--fg) 8%, transparent);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; min-height: 280px;
+}
+.cg-preview-placeholder {
+  color: var(--fg-dim); font-size: 0.8rem; text-align: center; padding: 40px 20px;
+}
+.cg-preview-placeholder .big-icon { font-size: 48px; margin-bottom: 12px; display: block; }
+.cg-preview-ratio {
+  position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6);
+  padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; color: #fff;
+}
+
+.cg-upload-area {
+  border: 2px dashed color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: var(--radius-sm); padding: 20px; text-align: center;
+  cursor: pointer; transition: all 0.2s; margin-top: 8px;
+}
+.cg-upload-area:hover { border-color: var(--accent); background: var(--accent-glow); }
+.cg-upload-area .upload-icon { font-size: 24px; margin-bottom: 6px; }
+.cg-upload-area .upload-text { font-size: 0.82rem; font-weight: 600; color: var(--accent); }
+
+.cg-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0; margin-top: 8px;
+}
+.cg-toggle-label { font-size: 0.85rem; font-weight: 600; }
+.cg-toggle {
+  width: 44px; height: 24px; border-radius: 12px; border: none;
+  background: color-mix(in srgb, var(--fg) 20%, transparent);
+  cursor: pointer; position: relative; transition: all 0.2s;
+}
+.cg-toggle::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px;
+  border-radius: 50%; background: #fff; transition: all 0.2s;
+}
+.cg-toggle.active { background: var(--accent); }
+.cg-toggle.active::after { left: 23px; }
+
+.cg-render-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 16px; border: none; border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent) 0%, #e08a00 100%);
+  color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 1rem;
+  cursor: pointer; transition: all 0.2s; margin-top: 16px;
+  letter-spacing: 0.03em; text-transform: uppercase;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+}
+.cg-render-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(245, 158, 11, 0.4); }
+.cg-render-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.cg-result-box {
+  margin-top: 12px; border-radius: var(--radius-sm); overflow: hidden;
+  background: color-mix(in srgb, var(--fg) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  padding: 16px;
+}
+.cg-result-box .result-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  font-weight: 700; color: var(--accent); font-size: 0.85rem;
+}
+.cg-result-box pre {
+  margin: 0; white-space: pre-wrap; word-break: break-word;
+  font-family: var(--font-body); font-size: 0.82rem; line-height: 1.7;
+  color: var(--fg-dim);
+}
+.cg-action-bar {
+  display: flex; gap: 8px; margin-top: 12px;
+}
+.cg-action-btn {
+  flex: 1; padding: 12px; border: none; border-radius: var(--radius-sm);
+  font-family: var(--font-display); font-weight: 700; font-size: 0.82rem;
+  cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.cg-action-btn.primary {
+  background: linear-gradient(135deg, #10b981, #059669); color: #fff;
+}
+.cg-action-btn.primary:hover { box-shadow: 0 4px 16px rgba(16,185,129,0.3); }
+.cg-action-btn.secondary {
+  background: color-mix(in srgb, var(--fg) 10%, transparent); color: var(--fg);
+}
+
+.cg-spinner {
+  width: 40px; height: 40px; border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-top-color: var(--accent); border-radius: 50%; animation: cg-spin 0.8s linear infinite;
+}
+@keyframes cg-spin { to { transform: rotate(360deg); } }
+
+.cg-prompt-output {
+  display: none; background: color-mix(in srgb, var(--fg) 5%, transparent);
+  border-radius: var(--radius-sm); padding: 16px; margin-top: 12px;
+  font-size: 0.82rem; line-height: 1.6; color: var(--fg-dim);
+  white-space: pre-wrap; word-break: break-word; max-height: 400px; overflow-y: auto;
+  position: relative;
+}
+.cg-prompt-output.visible { display: block; }
+
+/* FOOTER */
+.site-footer { text-align: center; padding: 32px 0 24px; color: var(--fg-dim); font-size: 0.75rem; letter-spacing: 0.02em; border-top: 1px solid color-mix(in srgb, var(--fg) 8%, transparent); max-width: 960px; margin: 0 auto; }
+
+/* VIDEO PLACEHOLDER */
+.video-placeholder {
+  background: var(--bg-card); border-radius: var(--radius); aspect-ratio: 9/16;
+  display: grid; place-items: center; color: var(--fg-dim); font-size: 0.8rem;
+}
+</style>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo" onclick="showPage('home')">
+      <div class="logo-icon">H</div>
+      Hanhan <span>Studio</span>
+    </div>
+    <div style="font-size:0.7rem;font-weight:600;color:var(--fg-dim);letter-spacing:0.08em;text-transform:uppercase">v2.0</div>
+  </div>
+  <nav id="mainNav">
+    <button class="active" onclick="showPage('home')">Home</button>
+    <button onclick="showPage('factory')">Pabrik Konten</button>
+    <button onclick="showPage('video')">Video Generator</button>
+    <button onclick="showPage('prompts')">Prompt Library</button>
+  </nav>
+</header>
+
+<!-- ══════ TOOL DETAIL OVERLAY ══════ -->
+<div class="tool-detail-overlay" id="toolOverlay">
+  <div class="tool-detail" id="toolDetail"></div>
+</div>
+
+<!-- ══════ PAGE: HOME ══════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <h1>AI Content Creator <em>Suite</em></h1>
+    <p class="hero-tagline">Tinggal pilih modul, copy-paste, dan produksi konten AI langsung jadi. Semua tool dalam satu tempat.</p>
+  </div>
+
+  <div class="notice">
+    <strong>📢 Info Penting</strong>
+    Beberapa layanan mungkin mengalami gangguan sementara. Cek halaman masing-masing tool untuk status terbaru.
+  </div>
+
+  <div class="tool-grid" style="margin-top:28px">
+    <a class="tool-card" onclick="showPage('factory')">
+      <div class="icon">🏭</div>
+      <div class="label">Pabrik Konten</div>
+      <div class="desc">7 tools produksi konten</div>
+    </a>
+    <a class="tool-card" onclick="openTool('character-generator')">
+      <div class="icon">🧑‍🎨</div>
+      <div class="label">Character Generator</div>
+      <div class="desc">Buat karakter AI unik</div>
+    </a>
+    <a class="tool-card" onclick="showPage('video')">
+      <div class="icon">🎬</div>
+      <div class="label">Video Generator</div>
+      <div class="desc">6 tools generate video</div>
+    </a>
+    <a class="tool-card" onclick="showPage('prompts')">
+      <div class="icon">📋</div>
+      <div class="label">Prompt Siap Pakai</div>
+      <div class="desc">14 prompt copy-paste</div>
+    </a>
+    <a class="tool-card" onclick="openTool('character-clone')">
+      <div class="icon">🧬</div>
+      <div class="label">Character Clone</div>
+      <div class="desc">Clone wajah ke AI</div>
+    </a>
+    <a class="tool-card" onclick="openTool('image-generator')">
+      <div class="icon">🖼️</div>
+      <div class="label">Image Generator</div>
+      <div class="desc">Generate gambar AI</div>
+    </a>
+    <a class="tool-card" onclick="openTool('ugc-konten')">
+      <div class="icon">📱</div>
+      <div class="label">UGC Konten</div>
+      <div class="desc">Konten user-generated</div>
+    </a>
+    <a class="tool-card" onclick="openTool('influencer-maker')">
+      <div class="icon">⭐</div>
+      <div class="label">Influencer Maker</div>
+      <div class="desc">Buat influencer virtual</div>
+    </a>
+  </div>
+
+  <h2 class="section-title">Featured AI Characters</h2>
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="charMarquee"></div>
+  </div>
+
+  <h2 class="section-title">Featured AI Motions</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
+    <div class="video-placeholder">Video segera hadir</div>
+    <div class="video-placeholder">Video segera hadir</div>
+    <div class="video-placeholder">Video segera hadir</div>
+  </div>
+</div>
+
+<!-- ══════ PAGE: PABRIK KONTEN ══════ -->
+<div class="page" id="page-factory">
+  <div class="page-intro">
+    <h2>Pabrik Konten</h2>
+    <p>Produksi konten AI dalam hitungan menit. Pilih tool, ikuti langkah, langsung jadi.</p>
+    <div class="step-bar">
+      <span>✦ Pilih Tool</span><span class="divider">→</span>
+      <span>Ikuti Step</span><span class="divider">→</span>
+      <span>Gak Pake Mikir</span><span class="divider">→</span>
+      <span>Langsung Jadi 🔥</span>
+    </div>
+  </div>
+
+  <div class="tool-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+    <a class="tool-card" onclick="openTool('music-clip')">
+      <span class="badge badge-ready">Ready</span>
+      <div class="icon">🎵</div>
+      <div class="label">Music Clip V2</div>
+      <div class="desc">Buat musik clip AI dengan karakter virtual</div>
+    </a>
+    <a class="tool-card" onclick="openTool('drama-pendek')">
+      <span class="badge badge-ready">Ready</span>
+      <div class="icon">🎭</div>
+      <div class="label">Drama Pendek V2</div>
+      <div class="desc">Cerita drama pendek dengan AI character</div>
+    </a>
+    <a class="tool-card" onclick="openTool('scene-extractor')">
+      <span class="badge badge-new">New</span>
+      <div class="icon">🎞️</div>
+      <div class="label">Scene Extractor</div>
+      <div class="desc">Ekstrak & breakdown scene dari referensi</div>
+    </a>
+    <a class="tool-card" onclick="openTool('drama-studio')">
+      <span class="badge badge-new">New</span>
+      <div class="icon">🎬</div>
+      <div class="label">Drama Studio</div>
+      <div class="desc">Studio lengkap produksi drama AI</div>
+    </a>
+    <a class="tool-card" onclick="openTool('podcast-studio')">
+      <span class="badge badge-ready">Ready</span>
+      <div class="icon">🎙️</div>
+      <div class="label">Podcast Studio</div>
+      <div class="desc">Buat skrip & visual podcast AI</div>
+    </a>
+    <a class="tool-card" onclick="openTool('frame-extractor')">
+      <span class="badge badge-new">New</span>
+      <div class="icon">🖼️</div>
+      <div class="label">Frame Extractor</div>
+      <div class="desc">Ambil frame terbaik dari video</div>
+    </a>
+    <a class="tool-card" onclick="openTool('meta-ads')">
+      <span class="badge badge-new">New</span>
+      <div class="icon">📊</div>
+      <div class="label">Meta Ads</div>
+      <div class="desc">Generate konten iklan Meta/FB/IG</div>
+    </a>
+  </div>
+</div>
+
+<!-- ══════ PAGE: VIDEO GENERATOR ══════ -->
+<div class="page" id="page-video">
+  <div class="page-intro">
+    <h2>Video Generator</h2>
+    <p>Generate video AI untuk berbagai keperluan konten.</p>
+    <div class="step-bar">
+      <span>✦ Pilih Tool</span><span class="divider">→</span>
+      <span>Ikuti Step</span><span class="divider">→</span>
+      <span>Gak Pake Mikir</span><span class="divider">→</span>
+      <span>Langsung Jadi 🔥</span>
+    </div>
+  </div>
+
+  <div class="tool-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+    <a class="tool-card" onclick="openTool('motion-control')">
+      <span class="badge badge-soon">Soon</span>
+      <div class="icon">🎮</div>
+      <div class="label">Motion Control</div>
+      <div class="desc">Kontrol gerakan karakter di video</div>
+    </a>
+    <a class="tool-card" onclick="openTool('drama-video')">
+      <span class="badge badge-ready">Ready</span>
+      <div class="icon">🎭</div>
+      <div class="label">Drama Video</div>
+      <div class="desc">Generate video drama pendek AI</div>
+    </a>
+    <a class="tool-card" onclick="openTool('influencer-video')">
+      <span class="badge badge-ready">Ready</span>
+      <div class="icon">⭐</div>
+      <div class="label">Influencer Video</div>
+      <div class="desc">Video AI gaya influencer</div>
+    </a>
+    <a class="tool-card" onclick="openTool('ugc-video')">
+      <span class="badge badge-soon">Soon</span>
+      <div class="icon">📱</div>
+      <div class="label">UGC Video</div>
+      <div class="desc">Video UGC otomatis dengan AI</div>
+    </a>
+    <a class="tool-card" onclick="openTool('podcast-video')">
+      <span class="badge badge-ready">Ready</span>
+      <div class="icon">🎙️</div>
+      <div class="label">Podcast Video</div>
+      <div class="desc">Video podcast dengan AI host</div>
+    </a>
+    <a class="tool-card" onclick="openTool('musik-video')">
+      <span class="badge badge-soon">Soon</span>
+      <div class="icon">🎵</div>
+      <div class="label">Musik Video</div>
+      <div class="desc">Music video full AI production</div>
+    </a>
+  </div>
+</div>
+
+<!-- ══════ PAGE: PROMPT LIBRARY ══════ -->
+<div class="page" id="page-prompts">
+  <div class="page-intro">
+    <h2>Prompt Siap Pakai</h2>
+    <p>Copy-paste prompt langsung ke AI generator favoritmu.</p>
+  </div>
+
+  <div class="lang-toggle">
+    <button class="active" onclick="setLang('id',this)">🇮🇩 Indonesia</button>
+    <button onclick="setLang('en',this)">🇺🇸 English</button>
+  </div>
+
+  <div class="prompt-grid" id="promptGrid"></div>
+</div>
+
+<footer class="site-footer">
+  Hanhan Studio v2.0 &mdash; AI Content Creator Suite &copy; 2024
+</footer>
+
+<script>
+// ─── Tool Data ───
+const toolData = {
+  'character-generator': {
+    icon: '🧑‍🎨', name: 'Character Generator', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Buat karakter AI unik dari nol. Tentukan wajah, outfit, pose, dan kepribadian — AI generate hasilnya dalam hitungan detik.',
+    steps: [
+      'Tentukan konsep karakter (gender, usia, style)',
+      'Deskripsikan wajah detail: bentuk wajah, mata, rambut, kulit',
+      'Pilih outfit dan aksesoris',
+      'Tentukan pose dan ekspresi',
+      'Copy prompt ke AI image generator (Gemini / Midjourney / dll)',
+      'Generate dan iterasi sampai puas'
+    ],
+    prompt: `Buat karakter AI dengan detail berikut:
+
+[IDENTITAS]
+- Nama: [nama karakter]
+- Gender: [laki-laki/perempuan]
+- Usia: [rentang usia]
+- Etnis/Style: [Asian/Western/Anime/dll]
+
+[WAJAH]
+- Bentuk wajah: [oval/bulat/persegi/heart]
+- Kulit: [warna dan tekstur]
+- Mata: [bentuk, warna, ukuran]
+- Rambut: [gaya, warna, panjang]
+- Ekspresi: [senyum/serius/misterius/dll]
+
+[OUTFIT]
+- Atasan: [deskripsi]
+- Bawahan: [deskripsi]
+- Sepatu: [deskripsi]
+- Aksesoris: [deskripsi]
+
+[POSE & SETTING]
+- Pose: [berdiri/duduk/action/candid]
+- Background: [lokasi/warna solid]
+- Pencahayaan: [natural/studio/dramatic]
+- Angle kamera: [eye level/low/high]
+
+STYLE: Hyper-realistic photography, 8K, detailed skin texture`,
+    tips: [
+      { icon: '💡', text: 'Semakin detail deskripsi wajah, semakin konsisten hasilnya di setiap generate' },
+      { icon: '🎯', text: 'Gunakan "seed" yang sama jika AI generator mendukung, agar karakter tetap konsisten' },
+      { icon: '📐', text: 'Mulai dari close-up portrait dulu, baru expand ke full body setelah wajah sesuai' }
+    ]
+  },
+  'character-clone': {
+    icon: '🧬', name: 'Character Clone', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Clone wajah real ke karakter AI. Upload foto referensi, AI akan membuat karakter baru dengan wajah yang sama.',
+    steps: [
+      'Siapkan foto referensi wajah (3-5 angle berbeda, idealnya)',
+      'Upload foto sebagai referensi ke AI tool',
+      'Deskripsikan detail tambahan yang ingin diterapkan',
+      'Generate karakter dengan wajah yang di-clone',
+      'Iterasi untuk konsistensi lintas pose dan outfit'
+    ],
+    prompt: `Clone wajah dari foto referensi ke karakter AI baru:
+
+[REFERENSI]
+- Gunakan wajah dari foto yang di-upload sebagai reference
+- Pertahankan: bentuk wajah, struktur tulang, proporsi fitur wajah
+
+[MODIFIKASI]
+- Ekspresi: [pertahankan/ubah ke: senyum, serius, dll]
+- Makeup: [natural/glamor/no makeup]
+- Pencahayaan wajah: [sesuaikan dengan scene baru]
+
+[BODY & OUTFIT BARU]
+- Body type: [deskripsi]
+- Outfit: [deskripsi lengkap]
+- Pose: [deskripsi pose]
+
+[SCENE]
+- Background: [deskripsi lokasi]
+- Waktu: [pagi/siang/sore/malam]
+- Mood: [casual/professional/dramatic]
+
+IMPORTANT: Wajah HARUS identik dengan referensi. Jangan modifikasi struktur wajah.
+STYLE: Photo-realistic, professional photography`,
+    tips: [
+      { icon: '📸', text: 'Foto referensi terbaik: cahaya merata, wajah menghadap depan, resolusi tinggi' },
+      { icon: '🔄', text: 'Generate beberapa variasi, lalu pilih yang paling mirip sebagai base untuk iterasi selanjutnya' },
+      { icon: '⚠️', text: 'Pastikan punya izin dari pemilik wajah sebelum clone. Gunakan secara etis.' }
+    ]
+  },
+  'image-generator': {
+    icon: '🖼️', name: 'Image Generator', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Generate gambar AI berkualitas tinggi untuk segala kebutuhan konten — dari portrait hingga produk, scene hingga thumbnail.',
+    steps: [
+      'Tentukan jenis gambar (portrait, product, scene, abstract)',
+      'Pilih style visual (realistic, anime, illustration, 3D)',
+      'Tulis deskripsi detail subject dan environment',
+      'Tambahkan spesifikasi teknis (resolusi, aspect ratio)',
+      'Generate dan refine'
+    ],
+    prompt: `Generate gambar AI dengan spesifikasi:
+
+[SUBJECT]
+- Objek utama: [deskripsi detail]
+- Posisi: [tengah/kiri/kanan/rule of thirds]
+- Ukuran relatif: [close-up/medium/wide]
+
+[ENVIRONMENT]
+- Background: [deskripsi lengkap]
+- Cuaca/Suasana: [cerah/mendung/malam/indoor]
+- Elemen pendukung: [props, dekorasi]
+
+[TEKNIS]
+- Style: [realistic/anime/oil painting/watercolor/3D render]
+- Resolusi: [4K/8K]
+- Aspect ratio: [1:1/4:3/16:9/9:16]
+- Color palette: [warm/cool/pastel/vibrant]
+
+[PENCAHAYAAN]
+- Sumber cahaya: [natural/studio/neon]
+- Arah: [depan/samping/backlit]
+- Mood: [bright/moody/dramatic/soft]
+
+[KAMERA]
+- Lens: [35mm/50mm/85mm/wide angle/telephoto]
+- Depth of field: [shallow bokeh/deep focus]
+- Filter: [none/vintage/cinematic/film grain]`,
+    tips: [
+      { icon: '🎨', text: 'Tambahkan nama fotografer atau art style terkenal sebagai referensi gaya' },
+      { icon: '📏', text: 'Untuk Instagram: 1:1 (feed), 4:5 (portrait feed), 9:16 (story/reel)' },
+      { icon: '🔑', text: 'Keyword magic: "cinematic lighting, 8K, ultra detailed" hampir selalu meningkatkan kualitas' }
+    ]
+  },
+  'ugc-konten': {
+    icon: '📱', name: 'UGC Konten', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Buat konten gaya User-Generated Content (UGC) menggunakan AI. Terlihat natural, authentic, dan relatable — cocok untuk endorsement & review.',
+    steps: [
+      'Tentukan produk/brand yang akan dipromosikan',
+      'Pilih tipe UGC (unboxing, review, tutorial, testimoni)',
+      'Setup karakter AI sebagai "content creator"',
+      'Generate skrip natural dan conversational',
+      'Buat visual yang terlihat candid, bukan staged'
+    ],
+    prompt: `Buat konten UGC AI untuk promosi produk:
+
+[PRODUK]
+- Nama produk: [nama]
+- Kategori: [skincare/fashion/tech/food/dll]
+- Key benefit: [manfaat utama 1-3]
+- Target audience: [demografi]
+
+[KARAKTER UGC]
+- Tipe creator: [beauty guru/tech reviewer/lifestyle/foodie]
+- Gender & usia: [sesuaikan dengan target]
+- Penampilan: [casual, relatable, bukan terlalu polished]
+- Ekspresi: [excited/surprised/satisfied]
+
+[SETTING]
+- Lokasi: [kamar/dapur/kantor/outdoor] — terlihat natural
+- Pencahayaan: [natural window light, tidak terlalu studio]
+- Props: [produk di tangan, packaging terlihat]
+
+[GAYA FOTO]
+- Angle: [selfie/mirror selfie/POV/eye level]
+- Quality: [iPhone quality, bukan DSLR — terlihat authentic]
+- Filter: [minimal, natural tones]
+
+[SKRIP/CAPTION]
+- Hook: [kalimat pembuka yang menarik perhatian]
+- Story: [pengalaman menggunakan produk]
+- CTA: [ajakan untuk coba produk]
+
+FORMAT: Vertical 9:16 untuk Reels/TikTok, candid style`,
+    tips: [
+      { icon: '📱', text: 'UGC yang bagus terlihat seperti diambil pakai HP, bukan kamera pro' },
+      { icon: '💬', text: 'Bahasa conversational > bahasa iklan. "Gue suka banget ini" > "Produk terbaik"' },
+      { icon: '🎯', text: 'Fokus pada problem-solution: masalah apa yang produk ini pecahkan?' }
+    ]
+  },
+  'influencer-maker': {
+    icon: '⭐', name: 'Influencer Maker', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Buat virtual influencer lengkap — dari persona, konten style, hingga feed aesthetic. AI influencer siap posting.',
+    steps: [
+      'Design persona influencer (nama, niche, personality)',
+      'Generate karakter visual yang konsisten',
+      'Buat content pillars dan posting schedule',
+      'Generate batch konten (foto + caption)',
+      'Maintain konsistensi visual di semua postingan'
+    ],
+    prompt: `Buat virtual AI influencer lengkap:
+
+[PERSONA]
+- Nama: [nama influencer]
+- Usia: [rentang usia]
+- Niche: [fashion/beauty/travel/fitness/tech/lifestyle]
+- Personality: [fun & bubbly / cool & minimalist / edgy / wholesome]
+- Bio: [deskripsi bio Instagram max 150 karakter]
+
+[VISUAL IDENTITY]
+- Wajah: [deskripsi detail — KONSISTEN di semua foto]
+- Body type: [deskripsi]
+- Signature style: [outfit style yang jadi ciri khas]
+- Color palette feed: [warna dominan untuk aesthetic feed]
+- Rambut: [gaya default]
+
+[KONTEN PLAN]
+- Content pillar 1: [misal: OOTD]
+- Content pillar 2: [misal: cafe hopping]
+- Content pillar 3: [misal: skincare routine]
+- Tone of voice caption: [casual/inspiring/funny/informative]
+
+[FOTO PERTAMA]
+- Konsep: [deskripsi foto pertama]
+- Lokasi: [setting]
+- Outfit: [pakaian]
+- Pose: [pose]
+- Caption: [contoh caption]
+
+STYLE: Instagram-worthy, cohesive feed aesthetic, natural lighting`,
+    tips: [
+      { icon: '🎭', text: 'Buat "character bible" — dokumen detail persona influencer untuk konsistensi jangka panjang' },
+      { icon: '📊', text: 'Posting 3 content pillars secara bergiliran agar feed tetap variatif tapi kohesif' },
+      { icon: '🔒', text: 'Gunakan Identity Lock Prompt (di Prompt Library) agar wajah karakter tidak berubah-ubah' }
+    ]
+  },
+  'music-clip': {
+    icon: '🎵', name: 'Music Clip V2', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Buat music clip/video klip AI lengkap — dari konsep visual, scene breakdown, sampai prompt per-frame untuk AI video generator.',
+    steps: [
+      'Pilih atau deskripsikan lagu/musik yang akan divisualisasikan',
+      'Tentukan konsep visual dan mood video klip',
+      'Breakdown lagu ke beberapa scene/segment',
+      'Generate prompt untuk setiap scene',
+      'Produksi frame/video per scene lalu gabungkan'
+    ],
+    prompt: `Buat konsep music clip AI:
+
+[MUSIK]
+- Judul lagu: [judul]
+- Genre: [pop/hiphop/EDM/ballad/rock]
+- Tempo: [slow/medium/fast]
+- Mood lagu: [happy/sad/energetic/dreamy]
+- Durasi: [menit:detik]
+
+[KONSEP VISUAL]
+- Tema: [story-driven / performance / aesthetic / abstract]
+- Setting utama: [lokasi/dunia]
+- Color grading: [warm/cold/neon/pastel/vintage]
+
+[KARAKTER]
+- Performer/vocalist: [deskripsi karakter utama]
+- Outfit: [pakaian di video klip]
+- Pendukung: [dancer/extras/none]
+
+[SCENE BREAKDOWN]
+Scene 1 (00:00-00:30): [intro — deskripsi visual]
+Scene 2 (00:30-01:00): [verse 1 — deskripsi visual]
+Scene 3 (01:00-01:30): [chorus — deskripsi visual]
+Scene 4 (01:30-02:00): [verse 2 — deskripsi visual]
+Scene 5 (02:00-02:30): [bridge — deskripsi visual]
+Scene 6 (02:30-03:00): [final chorus + outro — deskripsi visual]
+
+[TEKNIS]
+- Format: Vertical 9:16 / Horizontal 16:9
+- Transisi antar scene: [cut/dissolve/morph/glitch]
+- Efek: [slow motion/time lapse/particle/dll]`,
+    tips: [
+      { icon: '🎶', text: 'Sinkronkan perubahan visual dengan beat drop atau perubahan melodi untuk impact maksimal' },
+      { icon: '🎨', text: 'Gunakan 1-2 warna dominan konsisten di seluruh clip agar terlihat profesional' },
+      { icon: '✂️', text: 'Potong per 3-5 detik. Scene terlalu panjang terasa flat — variasi visual keeps viewer engaged' }
+    ]
+  },
+  'drama-pendek': {
+    icon: '🎭', name: 'Drama Pendek V2', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Buat cerita drama pendek AI lengkap dengan script, shot list, karakter, dan prompt visual per adegan.',
+    steps: [
+      'Tentukan genre dan premis cerita (max 3 menit)',
+      'Buat karakter utama dan pendukung',
+      'Tulis skenario per scene dengan dialog',
+      'Breakdown shot list dan visual per scene',
+      'Generate visual/video per adegan'
+    ],
+    prompt: `Buat drama pendek AI:
+
+[PREMIS]
+- Judul: [judul drama]
+- Genre: [romance/thriller/comedy/horror/slice of life]
+- Durasi: [1-3 menit]
+- Logline: [1 kalimat inti cerita]
+
+[KARAKTER]
+Karakter 1 (Protagonis):
+- Nama: [nama]
+- Visual: [deskripsi fisik detail]
+- Sifat: [3-5 kata sifat]
+- Motivasi: [apa yang diinginkan]
+
+Karakter 2 (Deuteragonis/Antagonis):
+- Nama: [nama]
+- Visual: [deskripsi fisik detail]
+- Sifat: [3-5 kata sifat]
+- Hubungan dengan K1: [hubungan]
+
+[SKENARIO]
+Scene 1 — [LOKASI] — [WAKTU]
+Shot: [wide/medium/close-up]
+Aksi: [apa yang terjadi]
+Dialog: "[dialog karakter]"
+Emosi: [mood scene]
+
+Scene 2 — [LOKASI] — [WAKTU]
+Shot: [wide/medium/close-up]
+Aksi: [apa yang terjadi]
+Dialog: "[dialog karakter]"
+Emosi: [mood scene]
+
+Scene 3 — [LOKASI] — [WAKTU]
+(... klimaks dan resolusi)
+
+[TEKNIS]
+- Aspect ratio: [9:16 vertical / 16:9 horizontal]
+- Color grading: [sesuai mood]
+- Music: [tipe background music]`,
+    tips: [
+      { icon: '📖', text: 'Struktur klasik: Setup → Conflict → Resolution. Dalam 3 menit, 3 scene saja cukup.' },
+      { icon: '🎭', text: 'Close-up wajah di momen emosional = engagement tinggi. Jangan semua wide shot.' },
+      { icon: '🔊', text: 'Gunakan background music dan sound effect untuk membangun suasana — visual alone kurang impactful' }
+    ]
+  },
+  'scene-extractor': {
+    icon: '🎞️', name: 'Scene Extractor', badge: 'New', badgeClass: 'badge-new',
+    subtitle: 'Analisa & breakdown video/film referensi menjadi scene-by-scene prompt. Reverse-engineer visual apapun menjadi prompt yang bisa direplikasi.',
+    steps: [
+      'Upload atau deskripsikan video/film referensi',
+      'AI menganalisa setiap scene: komposisi, lighting, mood',
+      'Dapatkan breakdown detail per scene',
+      'Setiap scene dikonversi menjadi prompt siap pakai',
+      'Generate ulang scene tersebut dengan AI'
+    ],
+    prompt: `Analisa dan breakdown scene dari video/gambar referensi:
+
+[REFERENSI]
+- Sumber: [upload gambar/video ATAU deskripsikan scene yang mau dianalisa]
+- Tipe: [film/iklan/music video/drama/foto]
+
+[ANALISA YANG DIMINTA]
+Untuk setiap scene/frame, breakdown:
+
+1. KOMPOSISI
+   - Framing: [close-up/medium/wide/extreme wide]
+   - Rule of thirds: [posisi subject]
+   - Depth: [foreground/midground/background elements]
+
+2. PENCAHAYAAN
+   - Sumber cahaya: [natural/artificial/mixed]
+   - Arah: [front/side/back/top/bottom]
+   - Quality: [hard/soft/diffused]
+   - Color temperature: [warm/cool/neutral]
+
+3. WARNA & MOOD
+   - Dominant colors: [warna utama]
+   - Color grading: [style grading]
+   - Mood/atmosphere: [deskripsi]
+
+4. SUBJECT
+   - Karakter: [deskripsi detail]
+   - Ekspresi: [deskripsi]
+   - Pose/aksi: [deskripsi]
+   - Outfit: [deskripsi]
+
+5. OUTPUT PROMPT
+   - Buat prompt yang bisa mereplikasi scene ini di AI image/video generator
+
+Format output: Satu blok prompt per scene yang siap di-copy-paste.`,
+    tips: [
+      { icon: '🔍', text: 'Screenshot frame terbaik dari video sebagai referensi — lebih mudah dianalisa daripada video penuh' },
+      { icon: '📝', text: 'Gunakan tool ini untuk "belajar" dari video viral — breakdown kenapa visual-nya menarik' },
+      { icon: '🔄', text: 'Combine dengan Identity Lock prompt agar karakter tetap konsisten saat recreate scene di project-mu' }
+    ]
+  },
+  'drama-studio': {
+    icon: '🎬', name: 'Drama Studio', badge: 'New', badgeClass: 'badge-new',
+    subtitle: 'Studio lengkap untuk produksi drama AI — dari script writing, storyboard, character design, sampai shot-by-shot production.',
+    steps: [
+      'Mulai dari ide cerita atau genre yang diinginkan',
+      'AI membantu develop script lengkap',
+      'Design semua karakter dengan visual yang konsisten',
+      'Buat storyboard per adegan',
+      'Produksi visual/video untuk setiap shot'
+    ],
+    prompt: `Buat produksi drama AI lengkap di Drama Studio:
+
+[PROJECT INFO]
+- Judul: [judul project]
+- Genre: [drama/romance/thriller/comedy/action]
+- Episode/Parts: [berapa bagian]
+- Durasi per part: [menit]
+- Platform target: [TikTok/Reels/YouTube Shorts/YouTube]
+
+[STORY DEVELOPMENT]
+- Premis: [1-2 kalimat inti cerita]
+- Setting: [dunia/lokasi cerita]
+- Timeline: [kapan cerita terjadi]
+- Tema: [pesan/tema utama]
+- Plot twist: [jika ada]
+
+[CHARACTER ROSTER]
+(Untuk setiap karakter utama, isi:)
+- Nama:
+- Peran: [protagonist/antagonist/supporting]
+- Visual: [deskripsi fisik DETAIL — ini jadi "lock" untuk konsistensi]
+- Arc: [perubahan karakter dari awal-akhir]
+- Signature look: [ciri khas visual]
+
+[PRODUCTION STYLE]
+- Visual style: [realistic/cinematic/anime/manhwa]
+- Color palette: [warna dominan]
+- Camera style: [handheld/steady/mixed]
+- Editing pace: [slow atmospheric/fast cut/mixed]
+- Music direction: [genre dan mood BGM]
+
+OUTPUT: Berikan script lengkap + shot list + visual prompt per scene.`,
+    tips: [
+      { icon: '🎯', text: 'Mulai dari 1 episode/part pendek (1-2 menit) dulu. Test audience response sebelum produksi full series.' },
+      { icon: '🧑‍🎨', text: 'Lock character design di awal — gunakan Character Generator + Identity Lock Prompt' },
+      { icon: '📋', text: 'Buat "production bible": dokumen referensi yang berisi semua karakter, lokasi, dan style guide' }
+    ]
+  },
+  'podcast-studio': {
+    icon: '🎙️', name: 'Podcast Studio', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Buat konten podcast AI lengkap — dari script percakapan, visual karakter host, thumbnail, sampai audiogram untuk social media.',
+    steps: [
+      'Tentukan topik dan format podcast (solo/duo/panel)',
+      'Design karakter host/hosts',
+      'Generate skrip percakapan natural',
+      'Buat visual: thumbnail, audiogram, cover art',
+      'Convert ke video podcast dengan AI'
+    ],
+    prompt: `Buat konten podcast AI:
+
+[PODCAST INFO]
+- Nama podcast: [nama]
+- Tagline: [tagline]
+- Niche: [topik utama]
+- Format: [solo/duo discussion/interview/panel]
+- Durasi: [menit]
+
+[HOST(S)]
+Host 1:
+- Nama: [nama]
+- Visual: [deskripsi fisik detail]
+- Personality: [gaya bicara: santai/serius/lucu/akademis]
+- Outfit: [pakaian yang dipakai saat recording]
+
+Host 2 (jika duo):
+- Nama: [nama]
+- Visual: [deskripsi fisik detail]
+- Dinamika dengan Host 1: [setuju terus/sering debat/complementary]
+
+[EPISODE INI]
+- Judul episode: [judul]
+- Topik: [topik pembahasan]
+- Key points: [3-5 poin utama yang harus dibahas]
+- Opening hook: [kalimat pembuka yang menarik]
+
+[SKRIP]
+Generate percakapan natural antara host(s) dengan format:
+
+[Host 1]: "dialog..."
+[Host 2]: "dialog..."
+
+Sertakan: humor natural, interupsi, reaksi ("wah gila", "bener banget")
+
+[VISUAL OUTPUT]
+1. Thumbnail YouTube (16:9) — eye-catching, ada wajah host
+2. Cover art podcast (1:1) — professional, brandable
+3. Audiogram template (1:1) — waveform visual + quote
+4. Setting recording: [studio/casual room/outdoor]`,
+    tips: [
+      { icon: '💬', text: 'Skrip podcast yang bagus terdengar natural — tambahkan filler words, tawa, dan reaksi spontan' },
+      { icon: '🖼️', text: 'Thumbnail podcast harus ada WAJAH + TEKS BESAR. Ini formula yang proven di YouTube.' },
+      { icon: '🎧', text: 'Buat 3-5 episode sekaligus agar style dan branding konsisten dari awal' }
+    ]
+  },
+  'frame-extractor': {
+    icon: '🖼️', name: 'Frame Extractor', badge: 'New', badgeClass: 'badge-new',
+    subtitle: 'Ambil dan analisa frame terbaik dari video AI. Pilih momen visual terkuat untuk dijadikan thumbnail, poster, atau social media post.',
+    steps: [
+      'Upload atau deskripsikan video yang ingin di-extract frame-nya',
+      'AI mengidentifikasi momen-momen visual terkuat',
+      'Pilih frame berdasarkan komposisi, ekspresi, atau momen',
+      'Enhance frame yang dipilih (upscale, color grade)',
+      'Export sebagai image untuk berbagai platform'
+    ],
+    prompt: `Extract dan analisa frame terbaik dari video:
+
+[VIDEO INFO]
+- Deskripsikan konten video: [apa yang terjadi di video]
+- Durasi: [berapa detik/menit]
+- Karakter yang muncul: [deskripsi]
+
+[KRITERIA FRAME TERBAIK]
+Pilih frame yang memenuhi:
+- Ekspresi paling kuat/menarik
+- Komposisi visual terbaik (rule of thirds, leading lines)
+- Pencahayaan paling flattering
+- Gerakan tidak blur (sharp frame)
+- Momen puncak emosional
+
+[ENHANCEMENT]
+- Upscale: [2x/4x]
+- Color grade: [enhance/cinematic/vibrant]
+- Crop: [sesuaikan untuk 1:1/4:5/16:9]
+
+[OUTPUT FORMAT]
+- Thumbnail YouTube: 1280x720, teks overlay space
+- Instagram post: 1080x1080 atau 1080x1350
+- Story/Reel cover: 1080x1920
+- Poster: high-res full frame
+
+Berikan top 3-5 frame terbaik dengan alasan pemilihan.`,
+    tips: [
+      { icon: '🖼️', text: 'Frame terbaik untuk thumbnail: ekspresi wajah yang kuat + warna kontras + tidak terlalu ramai' },
+      { icon: '⏱️', text: 'Momen terbaik biasanya di: awal gerakan, puncak aksi, atau momen transisi' },
+      { icon: '📐', text: 'Selalu crop dengan ruang untuk teks overlay jika akan dijadikan thumbnail' }
+    ]
+  },
+  'meta-ads': {
+    icon: '📊', name: 'Meta Ads', badge: 'New', badgeClass: 'badge-new',
+    subtitle: 'Generate konten iklan untuk Meta (Facebook & Instagram Ads) — dari visual kreatif, copywriting, sampai variasi A/B testing.',
+    steps: [
+      'Tentukan produk/layanan yang akan diiklankan',
+      'Pilih format ads (single image, carousel, video)',
+      'Tentukan target audience dan objective',
+      'Generate visual + copywriting',
+      'Buat variasi untuk A/B testing'
+    ],
+    prompt: `Buat konten Meta Ads (Facebook & Instagram):
+
+[PRODUK/LAYANAN]
+- Nama: [nama produk]
+- Kategori: [fashion/beauty/F&B/tech/jasa/dll]
+- Harga: [range harga]
+- USP: [keunggulan utama vs kompetitor]
+- Promo: [diskon/free ongkir/bonus/dll]
+
+[TARGET AUDIENCE]
+- Usia: [range]
+- Gender: [semua/male/female]
+- Interest: [minat/hobby target]
+- Pain point: [masalah yang dipecahkan produk]
+- Location: [jika relevan]
+
+[ADS FORMAT]
+Format 1 — Single Image Ad:
+- Visual: [product shot/lifestyle/before-after/UGC style]
+- Headline: [max 40 karakter, attention-grabbing]
+- Primary text: [2-3 kalimat hook + benefit + CTA]
+- CTA button: [Shop Now/Learn More/Sign Up/Get Offer]
+
+Format 2 — Carousel Ad (3-5 slides):
+- Slide 1: [hook visual + headline]
+- Slide 2: [benefit 1]
+- Slide 3: [benefit 2]
+- Slide 4: [social proof/testimoni]
+- Slide 5: [CTA + promo]
+
+Format 3 — Video Ad (15-30 detik):
+- 0-3s: Hook (stop the scroll!)
+- 3-10s: Problem agitation
+- 10-20s: Solution (produk)
+- 20-30s: CTA + promo
+
+[A/B TESTING]
+Buat 3 variasi:
+- Variasi A: [angle: emotional]
+- Variasi B: [angle: rational/benefit-focused]
+- Variasi C: [angle: social proof/FOMO]
+
+TECHNICAL: 1080x1080 (feed), 1080x1920 (story), text < 20% gambar`,
+    tips: [
+      { icon: '🛑', text: 'Hook 3 detik pertama menentukan segalanya. Jika gagal di 3 detik, audience scroll lewat.' },
+      { icon: '📊', text: 'Selalu buat minimal 3 variasi untuk A/B testing — biarkan data yang bicara, bukan asumsi' },
+      { icon: '💰', text: 'Format UGC style (terlihat organic, bukan iklan) biasanya punya CPM lebih murah & CTR lebih tinggi' }
+    ]
+  },
+  'motion-control': {
+    icon: '🎮', name: 'Motion Control', badge: 'Soon', badgeClass: 'badge-soon',
+    subtitle: 'Kontrol gerakan karakter AI di video dengan presisi — posisi, ekspresi, gesture, dan camera movement.',
+    steps: [
+      'Setup karakter dan scene',
+      'Definisikan gerakan per timestamp',
+      'Tentukan camera movement',
+      'Set transisi dan efek',
+      'Generate dan review per segment'
+    ],
+    prompt: `Kontrol motion/gerakan di video AI:
+
+[KARAKTER]
+- Deskripsi: [karakter yang sudah di-lock identity-nya]
+- Starting pose: [pose awal]
+
+[GERAKAN SEQUENCE]
+00:00-00:02: [Karakter diam, tatap kamera, slight smile]
+00:02-00:04: [Menoleh ke kanan, rambut bergerak natural]
+00:04-00:06: [Mengangkat tangan, wave gesture]
+00:06-00:08: [Berjalan mendekat ke kamera]
+00:08-00:10: [Close up wajah, wink]
+
+[KAMERA]
+- Movement: [static/pan/tilt/dolly/orbit]
+- Speed: [slow/normal/fast]
+- Focus: [face tracking/full body/rack focus]
+
+[ENVIRONMENT]
+- Background motion: [static/gentle wind/particles/rain]
+- Lighting shift: [none/sunrise effect/flickering]
+
+[STYLE]
+- Motion quality: [smooth/cinematic/snappy]
+- Frame rate feel: [24fps cinematic/30fps standard/60fps smooth]
+- Post-processing: [film grain/clean/dreamy glow]
+
+STATUS: Tool ini sedang dalam pengembangan.`,
+    tips: [
+      { icon: '🎯', text: 'Mulai dari gerakan sederhana dulu (menoleh, senyum), baru complex movement' },
+      { icon: '🔄', text: 'Loop animation (gerakan berulang) lebih mudah terlihat natural dibanding one-shot movement' },
+      { icon: '⏱️', text: 'Setiap gerakan butuh minimal 2 detik agar terlihat natural. Terlalu cepat = uncanny' }
+    ]
+  },
+  'drama-video': {
+    icon: '🎭', name: 'Drama Video', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Generate video drama AI scene-by-scene. Dari skrip jadi video pendek siap upload.',
+    steps: [
+      'Siapkan skrip drama (atau generate pakai Drama Pendek)',
+      'Lock karakter visual untuk konsistensi',
+      'Generate video per scene',
+      'Review dan refine setiap scene',
+      'Edit & gabungkan semua scene'
+    ],
+    prompt: `Generate video drama AI per scene:
+
+[PROJECT]
+- Judul: [judul drama]
+- Scene ke: [nomor scene dari total]
+- Referensi skrip: [link ke skrip atau tuliskan dialog]
+
+[SCENE INI]
+- Lokasi: [deskripsi setting detail]
+- Waktu: [pagi/siang/sore/malam]
+- Cuaca: [cerah/hujan/mendung/berkabut]
+- Durasi: [berapa detik]
+
+[KARAKTER DI SCENE INI]
+- Karakter: [nama] — [deskripsi LOCKED dari Character Generator]
+- Outfit: [pakaian di scene ini]
+- Emosi: [emosi yang ditampilkan]
+- Aksi: [apa yang dilakukan]
+- Dialog: "[apa yang dikatakan]"
+
+[KAMERA & VISUAL]
+- Shot type: [establishing/wide/medium/close-up/extreme CU]
+- Camera move: [static/pan/dolly/handheld]
+- Transisi masuk: [cut from previous/fade in/dissolve]
+- Transisi keluar: [cut to next/fade out/cliffhanger freeze]
+
+[MOOD]
+- Music: [tipe background music]
+- Color grade: [warm/cold/desaturated/high contrast]
+- Pace: [slow emotional/fast intense/medium natural]`,
+    tips: [
+      { icon: '🎬', text: 'Wide shot untuk establish lokasi, medium shot untuk interaksi, close-up untuk emosi' },
+      { icon: '🎭', text: 'Generate setiap scene 2-3x untuk pilih take terbaik — persis seperti syuting sungguhan' },
+      { icon: '✂️', text: 'Gunakan CapCut atau app editor lain untuk gabungkan scene + tambah musik dan SFX' }
+    ]
+  },
+  'influencer-video': {
+    icon: '⭐', name: 'Influencer Video', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Generate video gaya influencer — talking head, GRWM, OOTD, review, haul, dan daily vlog content.',
+    steps: [
+      'Pilih tipe konten influencer (GRWM, haul, vlog, dll)',
+      'Setup karakter influencer (atau pakai dari Influencer Maker)',
+      'Generate skrip conversational dan natural',
+      'Buat visual per segment video',
+      'Edit & finalize'
+    ],
+    prompt: `Buat video AI gaya influencer:
+
+[TIPE KONTEN]
+Pilih: [ ] GRWM (Get Ready With Me)
+       [ ] OOTD (Outfit of the Day)
+       [ ] Product Review/Haul
+       [ ] Daily Vlog
+       [ ] Tutorial
+       [ ] Storytelling/Curhat
+       [ ] Q&A
+
+[INFLUENCER]
+- Karakter: [deskripsi visual LOCKED]
+- Niche: [beauty/fashion/lifestyle/tech]
+- Platform: [TikTok/Reels/YouTube Shorts]
+- Tone: [energetic/calm/funny/relatable]
+
+[KONTEN]
+- Hook (0-3 detik): "[kalimat pembuka yang bikin orang stay]"
+- Isi: [apa yang ditampilkan/dibahas]
+- CTA: "[ajakan di akhir video]"
+
+[VISUAL STYLE]
+- Setting: [kamar/studio/outdoor/cafe]
+- Angle: [selfie/tripod eye level/over the shoulder]
+- Lighting: [ring light/window light/golden hour]
+- Decorasi: [sesuai aesthetic]
+
+[EDITING STYLE]
+- Pace: [fast cut TikTok style / medium / slow cinematic]
+- Text overlay: [bold/minimalist/handwritten font]
+- Music: [trending sound / lo-fi / upbeat]
+- Effects: [zoom in meme / smooth transition / none]
+
+FORMAT: 9:16 vertical, max 60 detik, hook di 3 detik pertama`,
+    tips: [
+      { icon: '📱', text: 'Video vertikal 9:16 WAJIB untuk TikTok dan Reels — jangan pakai 16:9' },
+      { icon: '🎯', text: 'Hook formula yang works: "POV...", "Things I wish I knew...", "Stop scrolling if..."' },
+      { icon: '⚡', text: 'Rata-rata watch time TikTok = 3-5 detik. Front-load value — jangan intro panjang.' }
+    ]
+  },
+  'ugc-video': {
+    icon: '📱', name: 'UGC Video', badge: 'Soon', badgeClass: 'badge-soon',
+    subtitle: 'Generate video UGC otomatis — review produk, unboxing, testimoni, dan demo yang terlihat authentic.',
+    steps: [
+      'Input detail produk dan brand guidelines',
+      'Pilih tipe UGC (unboxing, review, testimoni, demo)',
+      'AI generate karakter UGC creator + skrip',
+      'Generate video per segment',
+      'Edit dan finalize'
+    ],
+    prompt: `Buat video UGC AI:
+
+[PRODUK]
+- Nama: [nama produk]
+- Kategori: [skincare/gadget/fashion/food/dll]
+- Key selling point: [3 keunggulan utama]
+- Harga: [range]
+- Target: [demografi pembeli]
+
+[TIPE UGC VIDEO]
+Pilih: [ ] Unboxing excited
+       [ ] Honest review
+       [ ] Before-after
+       [ ] Day in my life (ft. produk)
+       [ ] Tutorial/How-to
+       [ ] Testimoni
+
+[CREATOR CHARACTER]
+- Tipe: [relatable everyday person, bukan model]
+- Usia: [sesuai target market]
+- Setting: [rumah/kamar/dapur — terlihat authentic]
+- Gaya bicara: [casual, seperti ngomong ke teman]
+
+[SKRIP VIDEO]
+Hook (0-3s): "[bikin penasaran]"
+Problem (3-8s): "[masalah yang dirasakan]"
+Discovery (8-15s): "[menemukan produk ini]"
+Demo (15-25s): "[pakai/tunjukkan produk]"
+Result (25-35s): "[hasilnya/perasaan setelah pakai]"
+CTA (35-40s): "[ajakan untuk beli]"
+
+FORMAT: 9:16, 30-60 detik, iPhone-quality aesthetic
+
+STATUS: Tool ini sedang dalam pengembangan.`,
+    tips: [
+      { icon: '📱', text: 'UGC video yang convert: terlihat seperti direkam sendiri, bukan diproduksi agency' },
+      { icon: '💡', text: 'Pencahayaan natural dari jendela > ring light. Terlalu polished = tidak authentic' },
+      { icon: '🗣️', text: 'Bahasa sehari-hari > bahasa marketing. "Ini enak banget sih" > "Produk ini memiliki kualitas premium"' }
+    ]
+  },
+  'podcast-video': {
+    icon: '🎙️', name: 'Podcast Video', badge: 'Ready', badgeClass: 'badge-ready',
+    subtitle: 'Convert podcast audio ke video format — dengan AI hosts, visual studio setup, dan animated audiogram.',
+    steps: [
+      'Setup karakter host (atau ambil dari Podcast Studio)',
+      'Generate visual studio/recording setup',
+      'Sync visual dengan skrip/audio',
+      'Tambahkan subtitle dan visual elements',
+      'Export dalam format video podcast'
+    ],
+    prompt: `Buat video podcast AI:
+
+[SETUP]
+- Format: [2 hosts duduk berhadapan / solo host / interview]
+- Studio: [professional studio / home studio / casual setting]
+- Peralatan terlihat: [mic, headphone, laptop, camera]
+
+[HOSTS VISUAL]
+Host 1: [deskripsi visual + outfit + posisi duduk]
+Host 2: [deskripsi visual + outfit + posisi duduk]
+
+[VISUAL SEQUENCE]
+- Wide shot: Kedua host terlihat, establishing shot
+- Medium shot: Fokus pada host yang sedang bicara
+- Close-up: Saat momen serius/lucu/penting
+- Reaction shot: Host yang mendengarkan
+- B-roll: Visual pendukung topik
+
+[PODCAST CONTENT]
+- Topik: [apa yang dibahas]
+- Key moments: [3-5 momen penting yang perlu visual emphasis]
+- Quote highlight: "[kutipan terbaik untuk clip/audiogram]"
+
+[VISUAL ELEMENTS]
+- Lower third: [nama host + title]
+- Topic card: [topik yang muncul di layar]
+- Quote card: [kutipan highlight]
+- Waveform/audiogram: [saat audio playing]
+- Subtitle: [auto-generated, bold keyword]
+
+FORMAT: 16:9 untuk YouTube, 9:16 clips untuk Reels/TikTok`,
+    tips: [
+      { icon: '🎥', text: 'Video podcast YouTube: switch antara wide, medium, dan close-up setiap 10-15 detik' },
+      { icon: '✂️', text: 'Clip terbaik untuk Reels: momen lucu, hot take, atau statement kontroversial. Max 60 detik.' },
+      { icon: '📝', text: 'Subtitle dengan keyword BOLD meningkatkan watch time 30-40% — selalu tambahkan subtitle' }
+    ]
+  },
+  'musik-video': {
+    icon: '🎵', name: 'Musik Video', badge: 'Soon', badgeClass: 'badge-soon',
+    subtitle: 'Full production music video AI — dari konsep kreatif, storyboard, sampai video final dengan karakter AI.',
+    steps: [
+      'Analisa lagu (genre, mood, tempo, lirik)',
+      'Develop konsep kreatif video',
+      'Design set/lokasi dan karakter',
+      'Buat storyboard per verse/chorus',
+      'Generate dan edit video'
+    ],
+    prompt: `Produksi musik video AI full:
+
+[LAGU]
+- Judul: [judul]
+- Artis: [nama artis/band AI]
+- Genre: [pop/hip-hop/R&B/rock/EDM/indie]
+- Tempo: [BPM atau slow/medium/fast]
+- Lirik tema: [tentang apa]
+- Durasi: [menit:detik]
+
+[KONSEP KREATIF]
+- Storyline: [narrative/performance/abstract/mixed]
+- Visual theme: [futuristic/vintage/nature/urban/fantasy]
+- Mood board: [referensi visual yang diinginkan]
+- Color world: [palette warna dominan]
+
+[PERFORMER/KARAKTER]
+- Lead performer: [deskripsi visual detail]
+- Outfit 1 (verse): [pakaian scene verse]
+- Outfit 2 (chorus): [pakaian scene chorus]
+- Backup/dancers: [jika ada]
+
+[STORYBOARD]
+Intro (0:00-0:15): [visual opening]
+Verse 1 (0:15-0:45): [scene + aksi + lokasi]
+Pre-chorus (0:45-1:00): [build up visual]
+Chorus 1 (1:00-1:30): [peak visual + energy]
+Verse 2 (1:30-2:00): [scene baru]
+Chorus 2 (2:00-2:30): [variasi chorus]
+Bridge (2:30-2:45): [shift mood/visual]
+Final Chorus (2:45-3:15): [climax]
+Outro (3:15-3:30): [closing visual]
+
+[PRODUCTION]
+- Format: 16:9 cinematic
+- Post-production: [VFX, color grade, transitions]
+- Text/lyrics on screen: [yes/no/selective]
+
+STATUS: Tool ini sedang dalam pengembangan.`,
+    tips: [
+      { icon: '🎬', text: 'Cut rate music video pro: 2-4 detik per shot. Lebih cepat di chorus, lebih lambat di verse.' },
+      { icon: '🎨', text: 'Batasi ke 2-3 lokasi/set maximum. Terlalu banyak lokasi = visual tidak kohesif' },
+      { icon: '⚡', text: 'Sync visual cuts dengan beat musik — ini yang membedakan MV amatir vs pro' }
+    ]
+  }
+};
+
+// ─── Navigation ───
+function showPage(id) {
+  closeToolOverlay();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('nav button').forEach((b, i) => {
+    const pages = ['home','factory','video','prompts'];
+    b.classList.toggle('active', pages[i] === id);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (history.replaceState) location.hash = id === 'home' ? '' : id;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const h = location.hash.replace('#','');
+  if (['factory','video','prompts'].includes(h)) showPage(h);
+});
+window.addEventListener('hashchange', () => {
+  const h = location.hash.replace('#','');
+  if (['factory','video','prompts','home',''].includes(h)) showPage(h || 'home');
+});
+
+// ─── Tool Detail Overlay ───
+function openTool(toolId) {
+  const tool = toolData[toolId];
+  if (!tool) return;
+
+  const overlay = document.getElementById('toolOverlay');
+  const detail = document.getElementById('toolDetail');
+
+  // Character Generator gets special form-based UI
+  if (toolId === 'character-generator') {
+    detail.innerHTML = buildCharGenUI();
+    overlay.classList.add('active');
+    overlay.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    initCharGen();
+    return;
+  }
+
+  const isSoon = tool.badge === 'Soon';
+
+  detail.innerHTML = `
+    <button class="tool-detail-back" onclick="closeToolOverlay()">← Kembali</button>
+    <div class="tool-detail-hero">
+      <div class="icon-big">${tool.icon}</div>
+      <h2>${tool.name}</h2>
+      <span class="tag ${tool.badgeClass}">${tool.badge}</span>
+      <p class="subtitle">${tool.subtitle}</p>
+    </div>
+
+    <div class="detail-section">
+      <h3>📋 Cara Menggunakan</h3>
+      <ol>
+        ${tool.steps.map(s => `<li>${s}</li>`).join('')}
+      </ol>
+    </div>
+
+    <div class="detail-section">
+      <h3>📝 Prompt Template</h3>
+      <p>Copy prompt di bawah ini dan paste ke AI generator kamu (Gemini, ChatGPT, Midjourney, dll):</p>
+      <div class="detail-prompt-box">
+        <pre>${escapeHtml(tool.prompt)}</pre>
+        <button class="copy-btn" onclick="copyToolPrompt(this)">📋 Copy</button>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h3>💡 Tips & Tricks</h3>
+      <div class="detail-tips">
+        ${tool.tips.map(t => `<div class="detail-tip"><span class="tip-icon">${t.icon}</span><span>${t.text}</span></div>`).join('')}
+      </div>
+    </div>
+
+    ${isSoon ? `
+    <div class="notice" style="margin-top:20px">
+      <strong>⏳ Coming Soon</strong>
+      Tool ini sedang dalam tahap pengembangan. Kamu sudah bisa mempelajari prompt template-nya sambil menunggu rilis resmi.
+    </div>` : `
+    <a class="detail-cta" href="#" target="_blank" onclick="event.preventDefault()">
+      🚀 Buka Tool
+    </a>`}
+  `;
+
+  overlay.classList.add('active');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeToolOverlay() {
+  document.getElementById('toolOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close on ESC
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeToolOverlay(); });
+// Close on backdrop click
+document.getElementById('toolOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeToolOverlay();
+});
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function copyToolPrompt(btn) {
+  const pre = btn.previousElementSibling;
+  const text = pre.textContent;
+  try {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✅ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+    }).catch(() => {
+      btn.textContent = 'Gagal copy';
+      setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
+    });
+  } catch(e) {
+    btn.textContent = 'Gagal copy';
+    setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
+  }
+}
+
+// ─── Marquee ───
+const charImages = document.getElementById('charMarquee');
+const imgSrcs = [
+  '/_blob/be4100354d1b435ac13bde5cbbd0ad2c',
+  '/_blob/e335142441348b44e6819024dd30911b',
+  '/_blob/8eb3173396e2f02ed1c55728cf70c364',
+  '/_blob/c43891c956e52f70e26ecd95873dc7c2',
+  '/_blob/5b0a7dc6e36c05dc53f16e1bd1d93135'
+];
+function buildMarquee() {
+  if (!charImages) return;
+  for (let dup = 0; dup < 2; dup++) {
+    imgSrcs.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src; img.alt = 'AI Generated Character'; img.loading = 'lazy';
+      charImages.appendChild(img);
+    });
+  }
+}
+buildMarquee();
+
+// ─── Prompt Library ───
+const prompts = {
+  id: [
+    { icon: '🎬', title: 'Motion Control Detail', text: 'Buatkan video motion dengan detail berikut:\n\n[KARAKTER]: Deskripsikan karakter utama secara detail (jenis kelamin, usia, pakaian, gaya rambut, ekspresi)\n[LATAR]: Deskripsikan lokasi/background (indoor/outdoor, waktu, cuaca, suasana)\n[GERAKAN]: Deskripsikan gerakan yang diinginkan step-by-step\n[KAMERA]: Deskripsikan pergerakan kamera (zoom in, pan left, tracking shot, dll)\n[DURASI]: Tentukan durasi video\n[MOOD]: Tentukan mood/nuansa (dramatic, cheerful, mysterious, dll)\n[MUSIK]: Deskripsikan jenis musik latar' },
+    { icon: '🎥', title: 'Motion Control Sederhana', text: 'Buat video pendek dengan konsep sederhana:\n\nKarakter: [deskripsikan karakter]\nAksi: [apa yang dilakukan karakter]\nBackground: [lokasi/setting]\nGaya: [cinematic/anime/realistic]\nDurasi: [berapa detik]' },
+    { icon: '🎭', title: 'Ganti Wajah Avatar', text: 'Ganti wajah pada karakter ini dengan wajah baru:\n\n[WAJAH ASLI]: Deskripsikan wajah karakter saat ini\n[WAJAH BARU]: Deskripsikan wajah pengganti secara detail (bentuk wajah, warna kulit, mata, hidung, bibir)\n[EKSPRESI]: Pertahankan ekspresi yang sama / ubah ke [ekspresi baru]\n[KONSISTENSI]: Pastikan pencahayaan dan angle wajah sesuai dengan body pose' },
+    { icon: '💡', title: 'Natural Face Lighting', text: 'Terapkan pencahayaan natural pada wajah karakter:\n\n[SUMBER CAHAYA]: Arah datangnya cahaya (atas, samping kiri/kanan, belakang)\n[WAKTU]: Golden hour / siang terik / malam / indoor\n[INTENSITAS]: Soft light / hard light / rim light\n[SHADOW]: Natural shadow di bawah dagu, hidung, dan alis\n[HIGHLIGHT]: Area highlight pada pipi, dahi, ujung hidung' },
+    { icon: '🌍', title: 'Ganti Tempat / Background', text: 'Pindahkan karakter ke lokasi baru:\n\n[KARAKTER]: Pertahankan karakter, pose, dan pakaian yang sama persis\n[LOKASI BARU]: Deskripsikan tempat/background baru secara detail\n[PENCAHAYAAN]: Sesuaikan pencahayaan karakter dengan environment baru\n[PERSPEKTIF]: Sesuaikan perspektif dan skala karakter dengan background\n[SHADOW]: Tambahkan bayangan yang realistis sesuai pencahayaan baru' },
+    { icon: '🏠', title: 'Lighting Ruangan', text: 'Setup pencahayaan ruangan untuk scene:\n\n[RUANGAN]: Tipe ruangan (kamar tidur, studio, kantor, cafe)\n[WAKTU HARI]: Pagi/siang/sore/malam\n[SUMBER CAHAYA]: Jendela, lampu utama, lampu aksen\n[MOOD]: Warm/cool/neutral/dramatic\n[DETAIL]: Tambahkan efek cahaya (god rays, bokeh, lens flare)' },
+    { icon: '🧍', title: 'Avatar Close Up', text: 'Generate foto close-up karakter AI:\n\n[WAJAH]: Deskripsikan detail wajah (bentuk, kulit, mata, alis, bibir)\n[RAMBUT]: Gaya, warna, dan panjang rambut\n[EKSPRESI]: Ekspresi wajah yang diinginkan\n[AKSESORIS]: Kacamata, anting, kalung, topi, dll\n[BACKGROUND]: Latar belakang (blur/bokeh/solid color)\n[GAYA FOTO]: Portrait/editorial/candid/studio' },
+    { icon: '🚶', title: 'Avatar Full Body', text: 'Generate foto full body karakter AI:\n\n[TUBUH]: Deskripsikan postur dan body type\n[PAKAIAN]: Outfit lengkap dari atas sampai bawah + sepatu\n[POSE]: Deskripsikan pose (berdiri, duduk, berjalan, action pose)\n[BACKGROUND]: Deskripsikan lokasi lengkap\n[PENCAHAYAAN]: Tipe pencahayaan (natural/studio/dramatic)\n[ANGLE KAMERA]: Low angle/eye level/high angle/dutch angle' },
+    { icon: '👘', title: 'Cosplay', text: 'Generate karakter AI dengan cosplay:\n\n[KARAKTER COSPLAY]: Nama karakter yang di-cosplay\n[KOSTUM]: Deskripsikan kostum secara detail\n[PROPS]: Senjata/aksesoris khas karakter\n[POSE]: Pose ikonik karakter tersebut\n[BACKGROUND]: Setting yang sesuai dengan dunia karakter\n[GAYA]: Realistic/anime/semi-realistic' },
+    { icon: '✨', title: 'Outfit + Pose + Background', text: 'Kombinasi lengkap outfit, pose dan background:\n\n[OUTFIT]: Deskripsikan pakaian lengkap\n[POSE]: Deskripsikan pose secara detail\n[BACKGROUND]: Deskripsikan lokasi dan suasana\n[WARNA]: Skema warna yang harmonis antara outfit dan background\n[MOOD]: Keseluruhan mood foto\n[FILTER]: Tipe color grading (warm/cool/vintage/moody)' },
+    { icon: '🔗', title: 'Sambung Video Motion', text: 'Lanjutkan/sambung video motion yang sudah ada:\n\n[VIDEO SEBELUMNYA]: Deskripsikan scene terakhir video sebelumnya\n[TRANSISI]: Tipe transisi (cut/dissolve/match cut/whip pan)\n[SCENE BARU]: Deskripsikan scene lanjutan\n[KONSISTENSI]: Pertahankan karakter, style, dan color grading yang sama\n[DURASI]: Durasi scene lanjutan' },
+    { icon: '🔒', title: 'Scene Prompt Lock', text: 'Kunci semua parameter scene agar konsisten di setiap generate:\n\n[LOCK KARAKTER]: [deskripsi karakter yang dikunci]\n[LOCK OUTFIT]: [deskripsi outfit yang dikunci]\n[LOCK STYLE]: [gaya visual yang dikunci: cinematic/anime/dll]\n[LOCK LIGHTING]: [pencahayaan yang dikunci]\n[LOCK CAMERA]: [angle kamera yang dikunci]\n\nGunakan parameter di atas untuk SEMUA scene berikutnya tanpa mengubah apapun.' },
+    { icon: '🛡', title: 'Flow Command Lock', text: 'Kunci alur kerja agar AI mengikuti instruksi secara ketat:\n\nMODE: STRICT FLOW\n\nStep 1: [instruksi pertama]\nStep 2: [instruksi kedua]\nStep 3: [instruksi ketiga]\n\nRULES:\n- Jangan skip step manapun\n- Jangan modifikasi parameter yang sudah di-lock\n- Jangan tambahkan elemen yang tidak diminta\n- Output harus sesuai format yang ditentukan' },
+    { icon: '🔐', title: 'Identity Lock Prompt', text: 'Kunci identitas karakter untuk konsistensi multi-scene:\n\n[NAMA]: Nama karakter\n[WAJAH]: Deskripsi detail wajah (WAJIB SAMA di semua scene)\n[TUBUH]: Postur dan body type (WAJIB SAMA)\n[CIRI KHAS]: Tanda lahir, bekas luka, tato, dll\n[RAMBUT]: Warna dan gaya rambut default\n[USIA VISUAL]: Rentang usia tampilan\n\nKarakter ini HARUS terlihat sebagai orang yang SAMA di setiap output.' }
+  ],
+  en: [
+    { icon: '🎬', title: 'Motion Control Detail', text: 'Create a motion video with these details:\n\n[CHARACTER]: Describe the main character in detail (gender, age, clothing, hairstyle, expression)\n[SETTING]: Describe the location/background (indoor/outdoor, time, weather, atmosphere)\n[MOVEMENT]: Describe desired movements step-by-step\n[CAMERA]: Describe camera movement (zoom in, pan left, tracking shot, etc.)\n[DURATION]: Set video duration\n[MOOD]: Set mood/atmosphere (dramatic, cheerful, mysterious, etc.)\n[MUSIC]: Describe background music style' },
+    { icon: '🎥', title: 'Simple Motion Control', text: 'Create a short video with simple concept:\n\nCharacter: [describe character]\nAction: [what the character does]\nBackground: [location/setting]\nStyle: [cinematic/anime/realistic]\nDuration: [how many seconds]' },
+    { icon: '🎭', title: 'Face Swap Avatar', text: 'Replace the face on this character with a new face:\n\n[ORIGINAL FACE]: Describe the current character face\n[NEW FACE]: Describe replacement face in detail (face shape, skin tone, eyes, nose, lips)\n[EXPRESSION]: Keep the same expression / change to [new expression]\n[CONSISTENCY]: Ensure lighting and face angle match the body pose' },
+    { icon: '💡', title: 'Natural Face Lighting', text: 'Apply natural lighting to character face:\n\n[LIGHT SOURCE]: Direction of light (top, left/right side, behind)\n[TIME]: Golden hour / bright noon / night / indoor\n[INTENSITY]: Soft light / hard light / rim light\n[SHADOW]: Natural shadow under chin, nose, and brows\n[HIGHLIGHT]: Highlight areas on cheeks, forehead, nose tip' },
+    { icon: '🌍', title: 'Change Background', text: 'Move character to a new location:\n\n[CHARACTER]: Keep the exact same character, pose, and clothing\n[NEW LOCATION]: Describe the new place/background in detail\n[LIGHTING]: Adjust character lighting to match new environment\n[PERSPECTIVE]: Match character perspective and scale with background\n[SHADOW]: Add realistic shadows matching new lighting' },
+    { icon: '🏠', title: 'Room Lighting', text: 'Setup room lighting for scene:\n\n[ROOM]: Room type (bedroom, studio, office, cafe)\n[TIME OF DAY]: Morning/afternoon/evening/night\n[LIGHT SOURCE]: Window, main light, accent light\n[MOOD]: Warm/cool/neutral/dramatic\n[DETAIL]: Add light effects (god rays, bokeh, lens flare)' },
+    { icon: '🧍', title: 'Avatar Close Up', text: 'Generate AI character close-up photo:\n\n[FACE]: Describe face details (shape, skin, eyes, brows, lips)\n[HAIR]: Style, color, and length\n[EXPRESSION]: Desired facial expression\n[ACCESSORIES]: Glasses, earrings, necklace, hat, etc.\n[BACKGROUND]: Background (blur/bokeh/solid color)\n[PHOTO STYLE]: Portrait/editorial/candid/studio' },
+    { icon: '🚶', title: 'Avatar Full Body', text: 'Generate AI character full body photo:\n\n[BODY]: Describe posture and body type\n[CLOTHING]: Complete outfit from top to bottom + shoes\n[POSE]: Describe pose (standing, sitting, walking, action pose)\n[BACKGROUND]: Describe complete location\n[LIGHTING]: Lighting type (natural/studio/dramatic)\n[CAMERA ANGLE]: Low angle/eye level/high angle/dutch angle' },
+    { icon: '👘', title: 'Cosplay', text: 'Generate AI character cosplay:\n\n[COSPLAY CHARACTER]: Name of character being cosplayed\n[COSTUME]: Describe costume in detail\n[PROPS]: Character-specific weapons/accessories\n[POSE]: Iconic pose of that character\n[BACKGROUND]: Setting matching the character world\n[STYLE]: Realistic/anime/semi-realistic' },
+    { icon: '✨', title: 'Outfit + Pose + Background', text: 'Complete outfit, pose and background combo:\n\n[OUTFIT]: Describe complete clothing\n[POSE]: Describe pose in detail\n[BACKGROUND]: Describe location and atmosphere\n[COLORS]: Harmonious color scheme between outfit and background\n[MOOD]: Overall photo mood\n[FILTER]: Color grading type (warm/cool/vintage/moody)' },
+    { icon: '🔗', title: 'Continue Video Motion', text: 'Continue/extend existing motion video:\n\n[PREVIOUS VIDEO]: Describe the last scene of previous video\n[TRANSITION]: Transition type (cut/dissolve/match cut/whip pan)\n[NEW SCENE]: Describe continuation scene\n[CONSISTENCY]: Keep same character, style, and color grading\n[DURATION]: Duration of continuation scene' },
+    { icon: '🔒', title: 'Scene Prompt Lock', text: 'Lock all scene parameters for consistency:\n\n[LOCK CHARACTER]: [locked character description]\n[LOCK OUTFIT]: [locked outfit description]\n[LOCK STYLE]: [locked visual style: cinematic/anime/etc]\n[LOCK LIGHTING]: [locked lighting]\n[LOCK CAMERA]: [locked camera angle]\n\nUse the above parameters for ALL following scenes without changing anything.' },
+    { icon: '🛡', title: 'Flow Command Lock', text: 'Lock workflow so AI follows instructions strictly:\n\nMODE: STRICT FLOW\n\nStep 1: [first instruction]\nStep 2: [second instruction]\nStep 3: [third instruction]\n\nRULES:\n- Do not skip any step\n- Do not modify locked parameters\n- Do not add unrequested elements\n- Output must match specified format' },
+    { icon: '🔐', title: 'Identity Lock Prompt', text: 'Lock character identity for multi-scene consistency:\n\n[NAME]: Character name\n[FACE]: Detailed face description (MUST BE SAME in all scenes)\n[BODY]: Posture and body type (MUST BE SAME)\n[DISTINCTIVE FEATURES]: Birthmarks, scars, tattoos, etc.\n[HAIR]: Default hair color and style\n[VISUAL AGE]: Apparent age range\n\nThis character MUST look like the SAME person in every output.' }
+  ]
+};
+
+let currentLang = 'id';
+
+function setLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPrompts();
+}
+
+function renderPrompts() {
+  const grid = document.getElementById('promptGrid');
+  grid.innerHTML = prompts[currentLang].map((p, i) => `
+    <div class="prompt-item" id="prompt-${i}">
+      <div class="prompt-header" onclick="togglePrompt(${i})">
+        <h3>${p.icon} ${p.title}</h3>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-text">${p.text}</div>
+        <button class="copy-btn" onclick="copyPrompt(${i}, this)">📋 Copy Prompt</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function togglePrompt(i) { document.getElementById('prompt-' + i).classList.toggle('open'); }
+
+function copyPrompt(i, btn) {
+  const text = prompts[currentLang][i].text;
+  try {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✅ Copied!'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '📋 Copy Prompt'; btn.classList.remove('copied'); }, 2000);
+    }).catch(() => { btn.textContent = 'Gagal copy'; setTimeout(() => { btn.textContent = '📋 Copy Prompt'; }, 2000); });
+  } catch(e) { btn.textContent = 'Gagal copy'; setTimeout(() => { btn.textContent = '📋 Copy Prompt'; }, 2000); }
+}
+
+renderPrompts();
+
+// ─── CHARACTER GENERATOR FORM UI ───
+function buildCharGenUI() {
+  return `
+    <button class="tool-detail-back" onclick="closeToolOverlay()">← Kembali</button>
+
+    <div class="cg-hero-banner">
+      <div>
+        <h2>🧑‍🎨 HANHAN BIKIN KARAKTER</h2>
+      </div>
+    </div>
+
+    <span class="cg-version">V1.0</span>
+    <p class="cg-desc">Custom karakter ready — monggo dicoba. Kalau tetap mau pakai baju bawaan dari gambar, aktifkan <strong>Pertahankan Outfit Asli</strong>.</p>
+
+    <!-- REFERENSI UTAMA -->
+    <div class="cg-section open">
+      <div class="cg-section-header" onclick="toggleCgSection(this)">
+        <span>📋 Referensi Utama</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="cg-section-body">
+        <div class="cg-label">CUSTOM CHARACTER BIBLE</div>
+        <p style="font-size:0.82rem;color:var(--fg-dim);margin-bottom:8px">Upload satu foto karakter. Identitas wajah dan ciri fisiknya menjadi sumber utama.</p>
+        <div class="cg-upload-area" onclick="document.getElementById('cgFileInput').click()">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">PILIH GAMBAR CUSTOM</div>
+          <div id="cgFileName" style="font-size:0.75rem;color:var(--fg-dim);margin-top:4px"></div>
+        </div>
+        <input type="file" id="cgFileInput" accept="image/*" style="display:none" onchange="cgFileSelected(this)">
+
+        <div class="cg-toggle-row">
+          <span class="cg-toggle-label">Pertahankan Outfit Asli</span>
+          <button class="cg-toggle" id="cgOutfitToggle" onclick="this.classList.toggle('active')"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RASIO OUTPUT -->
+    <div class="cg-section open">
+      <div class="cg-section-header" onclick="toggleCgSection(this)">
+        <span>📐 Rasio Output</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="cg-section-body">
+        <div class="cg-label">RASIO OUTPUT</div>
+        <div class="cg-ratio-group">
+          <button class="cg-ratio-btn active" onclick="selectRatio(this,'9:16')">9:16</button>
+          <button class="cg-ratio-btn" onclick="selectRatio(this,'4:5')">4:5</button>
+          <button class="cg-ratio-btn" onclick="selectRatio(this,'1:1')">1:1</button>
+          <button class="cg-ratio-btn" onclick="selectRatio(this,'16:9')">16:9</button>
+        </div>
+
+        <div class="cg-tab-group">
+          <button class="cg-tab active" onclick="selectCgTab(this,'image')">IMAGE</button>
+          <button class="cg-tab" onclick="selectCgTab(this,'prompt')">PROMPT</button>
+          <button class="cg-tab" onclick="selectCgTab(this,'json')">JSON</button>
+        </div>
+
+        <div class="cg-preview" id="cgPreview">
+          <div class="cg-preview-placeholder">
+            <span class="big-icon">🧑‍🎨</span>
+            Hasil render karakter akan muncul di sini
+          </div>
+          <span class="cg-preview-ratio" id="cgRatioLabel">9:16</span>
+        </div>
+
+        <div class="cg-prompt-output" id="cgPromptOutput"></div>
+      </div>
+    </div>
+
+    <!-- IDENTITAS -->
+    <div class="cg-section open">
+      <div class="cg-section-header" onclick="toggleCgSection(this)">
+        <span>👤 Identitas</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="cg-section-body">
+        <div class="cg-label">GENDER</div>
+        <div class="cg-btn-group">
+          <button class="cg-btn active" onclick="selectCgBtn(this,'gender')">🔒 WANITA</button>
+          <button class="cg-btn" onclick="selectCgBtn(this,'gender')">🔒 PRIA</button>
+        </div>
+
+        <div class="cg-label">ETNIS</div>
+        <select class="cg-select" id="cgEtnis" onchange="updateEtnisTipe()">
+          <option value="indonesia">Indonesia</option>
+          <option value="korea">Korea</option>
+          <option value="jepang">Jepang</option>
+          <option value="china">China</option>
+          <option value="india">India</option>
+          <option value="eropa">Eropa/Western</option>
+          <option value="arab">Arab/Middle East</option>
+          <option value="latin">Latin America</option>
+          <option value="afrika">Afrika</option>
+        </select>
+
+        <div class="cg-label">TIPE</div>
+        <div class="cg-btn-group" id="cgTipeGroup">
+          <button class="cg-btn active" onclick="selectCgBtn(this,'tipe')">INDONESIA MODERN</button>
+          <button class="cg-btn" onclick="selectCgBtn(this,'tipe')">CHINDO MODERN</button>
+          <button class="cg-btn" onclick="selectCgBtn(this,'tipe')">INDO-BARAT/LONDO</button>
+        </div>
+
+        <div class="cg-label">GAYA RAMBUT</div>
+        <select class="cg-select" id="cgRambut">
+          <option>Panjang Bergelombang</option>
+          <option>Panjang Lurus</option>
+          <option>Sebahu</option>
+          <option>Bob Pendek</option>
+          <option>Pixie Cut</option>
+          <option>Bercepol</option>
+          <option>Dikuncir</option>
+          <option>Berhijab</option>
+          <option>Buzz Cut</option>
+          <option>Undercut</option>
+          <option>Curly Afro</option>
+        </select>
+
+        <div class="cg-label">WARNA RAMBUT</div>
+        <select class="cg-select" id="cgWarnaRambut">
+          <option>Hitam Alami</option>
+          <option>Coklat Tua</option>
+          <option>Coklat Madu</option>
+          <option>Pirang/Blonde</option>
+          <option>Merah</option>
+          <option>Abu-abu/Silver</option>
+          <option>Biru</option>
+          <option>Pink</option>
+          <option>Ungu</option>
+          <option>Ombre</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- OUTFIT -->
+    <div class="cg-section">
+      <div class="cg-section-header" onclick="toggleCgSection(this)">
+        <span>👕 Outfit</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="cg-section-body">
+        <div class="cg-label">KATEGORI OUTFIT</div>
+        <select class="cg-select" id="cgOutfitKategori">
+          <option>Casual Sehari-hari</option>
+          <option>Smart Casual</option>
+          <option>Formal / Office</option>
+          <option>Streetwear</option>
+          <option>Sporty / Athleisure</option>
+          <option>Traditional / Kebaya</option>
+          <option>Party / Glamour</option>
+          <option>Beach / Summer</option>
+          <option>Winter / Layered</option>
+          <option>Cosplay / Fantasy</option>
+        </select>
+
+        <div class="cg-label">ATASAN</div>
+        <select class="cg-select" id="cgAtasan">
+          <option>Kaos Polos</option>
+          <option>Kemeja</option>
+          <option>Blouse</option>
+          <option>Crop Top</option>
+          <option>Hoodie</option>
+          <option>Blazer</option>
+          <option>Sweater/Knit</option>
+          <option>Tank Top</option>
+          <option>Jaket Denim</option>
+          <option>Jaket Kulit</option>
+          <option>Cardigan</option>
+        </select>
+
+        <div class="cg-label">BAWAHAN</div>
+        <select class="cg-select" id="cgBawahan">
+          <option>Jeans</option>
+          <option>Rok Mini</option>
+          <option>Rok Midi</option>
+          <option>Rok Panjang</option>
+          <option>Celana Kulot</option>
+          <option>Celana Pendek</option>
+          <option>Legging</option>
+          <option>Cargo Pants</option>
+          <option>Wide Leg Pants</option>
+          <option>Dress (One Piece)</option>
+        </select>
+
+        <div class="cg-label">WARNA OUTFIT</div>
+        <select class="cg-select" id="cgWarnaOutfit">
+          <option>Hitam</option>
+          <option>Putih</option>
+          <option>Merah</option>
+          <option>Biru Navy</option>
+          <option>Cream/Beige</option>
+          <option>Olive/Army</option>
+          <option>Pink/Dusty Rose</option>
+          <option>Abu-abu</option>
+          <option>Earth Tone</option>
+          <option>Pastel Mix</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- POSE & KAMERA -->
+    <div class="cg-section">
+      <div class="cg-section-header" onclick="toggleCgSection(this)">
+        <span>📷 Pose & Kamera</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="cg-section-body">
+        <div class="cg-label">TIPE SHOT</div>
+        <div class="cg-btn-group">
+          <button class="cg-btn active" onclick="selectCgBtn(this,'shot')">Close Up</button>
+          <button class="cg-btn" onclick="selectCgBtn(this,'shot')">Medium</button>
+          <button class="cg-btn" onclick="selectCgBtn(this,'shot')">Full Body</button>
+          <button class="cg-btn" onclick="selectCgBtn(this,'shot')">Cowboy</button>
+        </div>
+
+        <div class="cg-label">POSE</div>
+        <select class="cg-select" id="cgPose">
+          <option>Berdiri Natural</option>
+          <option>Duduk Santai</option>
+          <option>Bersandar</option>
+          <option>Berjalan</option>
+          <option>Tangan di Pinggang</option>
+          <option>Tangan di Saku</option>
+          <option>Menyilangkan Tangan</option>
+          <option>Memegang Rambut</option>
+          <option>Candid/Tertawa</option>
+          <option>Action Pose</option>
+          <option>Selfie Pose</option>
+          <option>Model Pose</option>
+        </select>
+
+        <div class="cg-label">EKSPRESI</div>
+        <select class="cg-select" id="cgEkspresi">
+          <option>Senyum Natural</option>
+          <option>Senyum Lebar</option>
+          <option>Serius/Cool</option>
+          <option>Mysterious</option>
+          <option>Tertawa</option>
+          <option>Malu-malu</option>
+          <option>Percaya Diri</option>
+          <option>Dreamy/Melamun</option>
+          <option>Fierce/Galak</option>
+          <option>Wink</option>
+        </select>
+
+        <div class="cg-label">ANGLE KAMERA</div>
+        <select class="cg-select" id="cgAngle">
+          <option>Eye Level</option>
+          <option>Low Angle (dari bawah)</option>
+          <option>High Angle (dari atas)</option>
+          <option>Dutch Angle (miring)</option>
+          <option>Over the Shoulder</option>
+          <option>3/4 View</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TEMPAT & CAHAYA -->
+    <div class="cg-section">
+      <div class="cg-section-header" onclick="toggleCgSection(this)">
+        <span>🌟 Tempat & Cahaya</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="cg-section-body">
+        <div class="cg-label">LOKASI</div>
+        <select class="cg-select" id="cgLokasi">
+          <option>Studio (Background Polos)</option>
+          <option>Kamar / Bedroom</option>
+          <option>Cafe / Coffee Shop</option>
+          <option>Jalan Kota / Urban</option>
+          <option>Taman / Garden</option>
+          <option>Pantai / Beach</option>
+          <option>Rooftop</option>
+          <option>Mall / Indoor</option>
+          <option>Perpustakaan</option>
+          <option>Kantor / Office</option>
+          <option>Hutan / Forest</option>
+          <option>Neon City / Cyberpunk</option>
+        </select>
+
+        <div class="cg-label">WAKTU</div>
+        <div class="cg-btn-group">
+          <button class="cg-btn active" onclick="selectCgBtn(this,'waktu')">Siang</button>
+          <button class="cg-btn" onclick="selectCgBtn(this,'waktu')">Golden Hour</button>
+          <button class="cg-btn" onclick="selectCgBtn(this,'waktu')">Malam</button>
+        </div>
+
+        <div class="cg-label">PENCAHAYAAN</div>
+        <select class="cg-select" id="cgCahaya">
+          <option>Natural Soft Light</option>
+          <option>Studio Lighting</option>
+          <option>Golden Hour Warm</option>
+          <option>Dramatic Side Light</option>
+          <option>Neon / RGB</option>
+          <option>Backlit / Rim Light</option>
+          <option>Cinematic</option>
+          <option>Ring Light</option>
+          <option>Window Light</option>
+        </select>
+
+        <div class="cg-label">MOOD / FILTER</div>
+        <select class="cg-select" id="cgMood">
+          <option>Clean & Natural</option>
+          <option>Warm & Cozy</option>
+          <option>Cool & Moody</option>
+          <option>Vintage Film</option>
+          <option>Cinematic</option>
+          <option>Dreamy / Soft Focus</option>
+          <option>High Contrast</option>
+          <option>Pastel</option>
+          <option>Dark & Edgy</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- RENDER BUTTON -->
+    <button class="cg-render-btn" onclick="renderCharacter()">
+      ⚡ RENDER KARAKTER REALTIME
+    </button>
+  `;
+}
+
+function initCharGen() {
+  // nothing extra needed for now
+}
+
+function toggleCgSection(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+function selectRatio(btn, ratio) {
+  btn.parentElement.querySelectorAll('.cg-ratio-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cgRatioLabel').textContent = ratio;
+  const preview = document.getElementById('cgPreview');
+  const ratioMap = {'9:16':'9/16','4:5':'4/5','1:1':'1/1','16:9':'16/9'};
+  preview.style.aspectRatio = ratioMap[ratio] || '9/16';
+}
+
+function selectCgTab(btn, tab) {
+  btn.parentElement.querySelectorAll('.cg-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const preview = document.getElementById('cgPreview');
+  const promptOutput = document.getElementById('cgPromptOutput');
+  const dlBar = document.getElementById('cgDownloadBar');
+  if (tab === 'image') {
+    preview.style.display = 'flex';
+    promptOutput.classList.remove('visible');
+    if (dlBar) dlBar.style.display = 'flex';
+  } else if (tab === 'prompt') {
+    preview.style.display = 'none';
+    promptOutput.classList.add('visible');
+    promptOutput.textContent = generatePromptText();
+    if (dlBar) dlBar.style.display = 'none';
+  } else if (tab === 'json') {
+    preview.style.display = 'none';
+    promptOutput.classList.add('visible');
+    promptOutput.textContent = JSON.stringify(gatherCharSettings(), null, 2);
+    if (dlBar) dlBar.style.display = 'none';
+  }
+}
+
+function selectCgBtn(btn, group) {
+  btn.parentElement.querySelectorAll('.cg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function cgFileSelected(input) {
+  const name = input.files[0] ? input.files[0].name : '';
+  document.getElementById('cgFileName').textContent = name ? '✅ ' + name : '';
+}
+
+function updateEtnisTipe() {
+  const etnis = document.getElementById('cgEtnis').value;
+  const group = document.getElementById('cgTipeGroup');
+  const tipeMap = {
+    indonesia: ['INDONESIA MODERN','CHINDO MODERN','INDO-BARAT/LONDO'],
+    korea: ['K-POP STYLE','K-DRAMA STYLE','KOREA NATURAL'],
+    jepang: ['HARAJUKU','JAPANESE MINIMAL','ANIME STYLE'],
+    china: ['C-POP STYLE','CHINESE TRADITIONAL','CHINA MODERN'],
+    india: ['BOLLYWOOD','INDIAN MODERN','SOUTH INDIAN'],
+    eropa: ['WESTERN CLASSIC','SCANDINAVIAN','MEDITERRANEAN'],
+    arab: ['ARABIAN MODERN','GULF STYLE','LEVANTINE'],
+    latin: ['LATIN POP','BRAZILIAN','REGGAETON STYLE'],
+    afrika: ['AFRO MODERN','WEST AFRICAN','EAST AFRICAN']
+  };
+  const options = tipeMap[etnis] || tipeMap.indonesia;
+  group.innerHTML = options.map((t, i) =>
+    `<button class="cg-btn${i === 0 ? ' active' : ''}" onclick="selectCgBtn(this,'tipe')">${t}</button>`
+  ).join('');
+}
+
+function gatherCharSettings() {
+  const getActive = (parent) => {
+    const el = parent.querySelector('.cg-btn.active');
+    return el ? el.textContent.replace('🔒 ','').trim() : '';
+  };
+  const sections = document.querySelectorAll('.cg-section');
+  return {
+    gender: getActive(sections[2]),
+    etnis: document.getElementById('cgEtnis')?.value || '',
+    tipe: (() => { const g = document.getElementById('cgTipeGroup'); return g ? getActive(g) : ''; })(),
+    gaya_rambut: document.getElementById('cgRambut')?.value || '',
+    warna_rambut: document.getElementById('cgWarnaRambut')?.value || '',
+    outfit: {
+      kategori: document.getElementById('cgOutfitKategori')?.value || '',
+      atasan: document.getElementById('cgAtasan')?.value || '',
+      bawahan: document.getElementById('cgBawahan')?.value || '',
+      warna: document.getElementById('cgWarnaOutfit')?.value || ''
+    },
+    pose: {
+      shot: (() => { const s = document.querySelectorAll('.cg-section')[4]; return s ? getActive(s) : ''; })(),
+      pose: document.getElementById('cgPose')?.value || '',
+      ekspresi: document.getElementById('cgEkspresi')?.value || '',
+      angle: document.getElementById('cgAngle')?.value || ''
+    },
+    scene: {
+      lokasi: document.getElementById('cgLokasi')?.value || '',
+      waktu: (() => { const s = document.querySelectorAll('.cg-section')[5]; return s ? getActive(s) : ''; })(),
+      cahaya: document.getElementById('cgCahaya')?.value || '',
+      mood: document.getElementById('cgMood')?.value || ''
+    },
+    rasio: document.getElementById('cgRatioLabel')?.textContent || '9:16',
+    pertahankan_outfit: document.getElementById('cgOutfitToggle')?.classList.contains('active') || false
+  };
+}
+
+function generatePromptText() {
+  const s = gatherCharSettings();
+  return `Generate a hyper-realistic AI character photo with these specifications:
+
+[CHARACTER]
+Gender: ${s.gender}
+Ethnicity: ${s.etnis} — ${s.tipe}
+Hair style: ${s.gaya_rambut}
+Hair color: ${s.warna_rambut}
+
+[OUTFIT]
+Category: ${s.outfit.kategori}
+Top: ${s.outfit.atasan}
+Bottom: ${s.outfit.bawahan}
+Color: ${s.outfit.warna}
+${s.pertahankan_outfit ? '⚠️ KEEP ORIGINAL OUTFIT FROM REFERENCE IMAGE' : ''}
+
+[POSE & CAMERA]
+Shot type: ${s.pose.shot}
+Pose: ${s.pose.pose}
+Expression: ${s.pose.ekspresi}
+Camera angle: ${s.pose.angle}
+
+[SCENE & LIGHTING]
+Location: ${s.scene.lokasi}
+Time: ${s.scene.waktu}
+Lighting: ${s.scene.cahaya}
+Mood/Filter: ${s.scene.mood}
+
+[TECHNICAL]
+Aspect ratio: ${s.rasio}
+Quality: 8K, ultra-detailed, professional photography
+Style: Hyper-realistic, natural skin texture, detailed eyes`;
+}
+
+// ──── CONFIG: Ganti URL ini setelah deploy Cloudflare Worker ────
+const WORKER_URL = 'https://hanhan-imagen-proxy.boyslucky740.workers.dev';
+
+let cgLastImageBase64 = null;
+
+async function renderCharacter() {
+  const s = gatherCharSettings();
+  const promptText = generatePromptText();
+  const renderBtn = document.querySelector('.cg-render-btn');
+  const preview = document.getElementById('cgPreview');
+  const promptOutput = document.getElementById('cgPromptOutput');
+
+  // Switch to IMAGE tab
+  const tabs = document.querySelectorAll('.cg-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  tabs[0].classList.add('active');
+  preview.style.display = 'flex';
+  promptOutput.classList.remove('visible');
+
+  // Remove old download bar
+  const oldDl = document.getElementById('cgDownloadBar');
+  if (oldDl) oldDl.remove();
+
+  // Map our ratios to Imagen supported ratios
+  const ratioMap = { '9:16':'9:16', '4:5':'3:4', '1:1':'1:1', '16:9':'16:9' };
+  const aspectRatio = ratioMap[s.rasio] || '1:1';
+
+  // Build compact prompt
+  const compact = `Hyper-realistic professional photograph of a ${s.gender.toLowerCase()} person, ${s.etnis} ${s.tipe} ethnicity, ${s.gaya_rambut} ${s.warna_rambut} hair. Wearing ${s.outfit.warna} ${s.outfit.atasan} and ${s.outfit.bawahan}, ${s.outfit.kategori} style. ${s.pose.shot} shot, ${s.pose.pose} pose, ${s.pose.ekspresi} expression, ${s.pose.angle} camera angle. Location: ${s.scene.lokasi}, ${s.scene.waktu} time, ${s.scene.cahaya} lighting, ${s.scene.mood} mood. 8K ultra-detailed, natural skin texture, professional studio photography, cinematic color grading.`;
+
+  // Show loading
+  renderBtn.disabled = true;
+  renderBtn.innerHTML = '⏳ Generating via Gemini Imagen...';
+  preview.innerHTML = `
+    <div class="cg-preview-placeholder">
+      <div class="cg-spinner"></div>
+      <div style="margin-top:16px">🎨 Generating karakter...<br><small style="color:var(--fg-dim)">Memproses via Gemini Imagen AI — tunggu 5-15 detik</small></div>
+    </div>
+    <span class="cg-preview-ratio" id="cgRatioLabel">${s.rasio}</span>`;
+
+  try {
+    const resp = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: compact, aspectRatio, sampleCount: 1 }),
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok || !data.images || data.images.length === 0) {
+      throw new Error(data.error || 'Gagal generate gambar');
+    }
+
+    const img = data.images[0];
+    cgLastImageBase64 = img.base64;
+    const dataUrl = `data:${img.mimeType};base64,${img.base64}`;
+
+    preview.innerHTML = `
+      <img src="${dataUrl}" alt="Generated Character" style="width:100%;height:auto;border-radius:var(--radius-sm)">
+      <span class="cg-preview-ratio" id="cgRatioLabel">${s.rasio}</span>`;
+    preview.style.aspectRatio = '';
+
+    // Add action bar
+    const dlBar = document.createElement('div');
+    dlBar.className = 'cg-action-bar';
+    dlBar.id = 'cgDownloadBar';
+    dlBar.innerHTML = `
+      <button class="cg-action-btn primary" onclick="downloadCgImage()">⬇️ Download PNG</button>
+      <button class="cg-action-btn secondary" onclick="renderCharacter()">🔄 Generate Ulang</button>
+      <button class="cg-action-btn secondary" onclick="copyCgPromptDirect()">📋 Copy Prompt</button>
+    `;
+    preview.parentElement.insertBefore(dlBar, preview.nextSibling);
+    preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  } catch (err) {
+    preview.innerHTML = `
+      <div class="cg-preview-placeholder">
+        <span class="big-icon">⚠️</span>
+        <div>${escapeHtml(err.message)}</div>
+        <div style="margin-top:8px;font-size:0.75rem;color:var(--fg-dim)">
+          Pastikan Cloudflare Worker sudah di-deploy dan API key sudah diset.<br>
+          Atau gunakan tab PROMPT untuk copy prompt manual.
+        </div>
+      </div>
+      <span class="cg-preview-ratio" id="cgRatioLabel">${s.rasio}</span>`;
+  }
+
+  renderBtn.disabled = false;
+  renderBtn.innerHTML = '⚡ RENDER KARAKTER REALTIME';
+}
+
+function downloadCgImage() {
+  if (!cgLastImageBase64) return;
+  const link = document.createElement('a');
+  link.href = `data:image/png;base64,${cgLastImageBase64}`;
+  link.download = `hanhan-character-${Date.now()}.png`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function copyCgPromptDirect() {
+  const promptText = generatePromptText();
+  navigator.clipboard.writeText(promptText).then(() => {
+    const btn = event.target;
+    btn.textContent = '✅ Tercopy!';
+    setTimeout(() => { btn.textContent = '📋 Copy Prompt'; }, 2000);
+  });
+}
+</script>
